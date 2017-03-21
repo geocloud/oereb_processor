@@ -1,3 +1,9 @@
+Das jetzige Projekt ist noch nicht Kompilierbar, da noch einige Projekte fehlen, diese werden in den kommenden Wochen ergänzt.
+
+Bei Fragen melden Sie sich bitte unter:
+
+info@geocloud.ch
+
 Motivation / Problemstellung
 
 Das Schwergewichtsprojekt der ÖREBK-Pilotkantone Nidwalden und Obwalden befasste sich mit der Modellierung der Beziehung zwischen Geodaten und Rechtsdaten. Neben den Geodaten, die den Raumbezug vorgeben und den Rechtsdaten, welche die öffentlich-rechtlichen Beschränkungen bezeichnen, muss eine dritte Art von Daten die Zuordnung zwischen diesen Daten regeln. Was bei erster Betrachtung einfach erscheint, stellt für die automatische, computergestützte Verarbeitung, etwa beim Erstellen eines ÖREBK-Auszugs, eine grosse Herausforderung dar.

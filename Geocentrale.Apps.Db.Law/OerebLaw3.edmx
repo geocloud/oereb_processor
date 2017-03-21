@@ -1,0 +1,829 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OerebLaw3.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="OerebLaw3StoreContainer">
+    <EntitySet Name="OerebDefinitionSet" EntityType="OerebLaw3.Store.OerebDefinitionSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ZustStelleSet" EntityType="OerebLaw3.Store.ZustStelleSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RechtsstatusSet" EntityType="OerebLaw3.Store.RechtsstatusSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OerebKThemaSet" EntityType="OerebLaw3.Store.OerebKThemaSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ArtCodeSet" EntityType="OerebLaw3.Store.ArtCodeSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ArtikelSet" EntityType="OerebLaw3.Store.ArtikelSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RechtsnormSet" EntityType="OerebLaw3.Store.RechtsnormSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RechtsnormTypSet" EntityType="OerebLaw3.Store.RechtsnormTypSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OerebDefinitionRechtsvorschrift" EntityType="OerebLaw3.Store.OerebDefinitionRechtsvorschrift" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OerebDefinitionArtikel" EntityType="OerebLaw3.Store.OerebDefinitionArtikel" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_OerebDefinitionRechtsvorschrift_OerebDefinition" Association="OerebLaw3.Store.FK_OerebDefinitionRechtsvorschrift_OerebDefinition">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="OerebDefinitionRechtsvorschrift" EntitySet="OerebDefinitionRechtsvorschrift" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OerebDefinitionRechtsvorschrift_Rechtsvorschrift" Association="OerebLaw3.Store.FK_OerebDefinitionRechtsvorschrift_Rechtsvorschrift">
+      <End Role="Rechtsvorschrift" EntitySet="RechtsnormSet" />
+      <End Role="OerebDefinitionRechtsvorschrift" EntitySet="OerebDefinitionRechtsvorschrift" />
+    </AssociationSet>
+    <AssociationSet Name="OerebDefinitionOerebKThema" Association="OerebLaw3.Store.OerebDefinitionOerebKThema">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="OerebKThema" EntitySet="OerebKThemaSet" />
+    </AssociationSet>
+    <AssociationSet Name="OerebDefinitionRechtsstatus" Association="OerebLaw3.Store.OerebDefinitionRechtsstatus">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="Rechtsstatus" EntitySet="RechtsstatusSet" />
+    </AssociationSet>
+    <AssociationSet Name="OerebDefinitionArtCode" Association="OerebLaw3.Store.OerebDefinitionArtCode">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="ArtCode" EntitySet="ArtCodeSet" />
+    </AssociationSet>
+    <AssociationSet Name="OerebDefinitionOerebDefinition" Association="OerebLaw3.Store.OerebDefinitionOerebDefinition">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="OerebDefinition1" EntitySet="OerebDefinitionSet" />
+    </AssociationSet>
+    <AssociationSet Name="RechtsvorschriftRechtsstatus" Association="OerebLaw3.Store.RechtsvorschriftRechtsstatus">
+      <End Role="Rechtsvorschrift" EntitySet="RechtsnormSet" />
+      <End Role="Rechtsstatus" EntitySet="RechtsstatusSet" />
+    </AssociationSet>
+    <AssociationSet Name="RechtsnormRechtsnormTyp" Association="OerebLaw3.Store.RechtsnormRechtsnormTyp">
+      <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+      <End Role="RechtsnormTyp" EntitySet="RechtsnormTypSet" />
+    </AssociationSet>
+    <AssociationSet Name="OerebDefinitionZustStelle" Association="OerebLaw3.Store.OerebDefinitionZustStelle">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="ZustStelle" EntitySet="ZustStelleSet" />
+    </AssociationSet>
+    <AssociationSet Name="RechtsnormZustStelle" Association="OerebLaw3.Store.RechtsnormZustStelle">
+      <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+      <End Role="ZustStelle" EntitySet="ZustStelleSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OerebDefinitionArtikel_OerebDefinition" Association="OerebLaw3.Store.FK_OerebDefinitionArtikel_OerebDefinition">
+      <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+      <End Role="OerebDefinitionArtikel" EntitySet="OerebDefinitionArtikel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OerebDefinitionArtikel_Artikel" Association="OerebLaw3.Store.FK_OerebDefinitionArtikel_Artikel">
+      <End Role="Artikel" EntitySet="ArtikelSet" />
+      <End Role="OerebDefinitionArtikel" EntitySet="OerebDefinitionArtikel" />
+    </AssociationSet>
+    <AssociationSet Name="RechtsnormRechtsnorm" Association="OerebLaw3.Store.RechtsnormRechtsnorm">
+      <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+      <End Role="Rechtsnorm1" EntitySet="RechtsnormSet" />
+    </AssociationSet>
+    <AssociationSet Name="ArtikelRechtsnorm" Association="OerebLaw3.Store.ArtikelRechtsnorm">
+      <End Role="Artikel" EntitySet="ArtikelSet" />
+      <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="OerebDefinitionSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Aussage" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UmschreibungRaumbezug" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="LinkGeobasisdaten" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ArtCodeliste" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="IsLive" Type="bit" Nullable="true" />
+    <Property Name="VisibilityDate" Type="datetime" Nullable="true" />
+    <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OriginalId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OerebKThema_Id" Type="int" Nullable="false" />
+    <Property Name="Rechtsstatus_Id" Type="int" Nullable="false" />
+    <Property Name="ArtCode_Id" Type="int" Nullable="true" />
+    <Property Name="Parent_Id" Type="int" Nullable="true" />
+    <Property Name="ZustStelle_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ZustStelleSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Kanton" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Gemeinde" Type="int" Nullable="true" />
+    <Property Name="Abkuerzung" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OriginalId" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="RechtsstatusSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bezeichnung" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OerebKThemaSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Beschreibung" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ArtCodeSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Wert" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ArtikelSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Nr" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsLive" Type="bit" Nullable="true" />
+    <Property Name="VisibilityDate" Type="datetime" Nullable="true" />
+    <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OriginalId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Rechtsnorm_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RechtsnormSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="LinkLexFindId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="LinkLexFindKtSysNr" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Titel" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="OffiziellerTitel" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Abkuerzung" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OffizielleNr" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Kanton" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Gemeinde" Type="int" Nullable="true" />
+    <Property Name="DokumentBinary" Type="varbinary(max)" Nullable="true" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="PubliziertAb" Type="datetime" Nullable="false" />
+    <Property Name="IsLive" Type="bit" Nullable="true" />
+    <Property Name="VisibilityDate" Type="datetime" Nullable="true" />
+    <Property Name="ArtikelBezeichner" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Source" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OriginalId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Rechtsstatus_Id" Type="int" Nullable="false" />
+    <Property Name="RechtsnormTyp_Id" Type="int" Nullable="false" />
+    <Property Name="ZustStelle_Id" Type="int" Nullable="false" />
+    <Property Name="Parent_Id" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="RechtsnormTypSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bezeichnung" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OerebDefinitionRechtsvorschrift">
+    <Key>
+      <PropertyRef Name="OerebDefinition_Id" />
+      <PropertyRef Name="Rechtsnorm_Id" />
+    </Key>
+    <Property Name="OerebDefinition_Id" Type="int" Nullable="false" />
+    <Property Name="Rechtsnorm_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OerebDefinitionArtikel">
+    <Key>
+      <PropertyRef Name="OerebDefinition_Id" />
+      <PropertyRef Name="Artikel_Id" />
+    </Key>
+    <Property Name="OerebDefinition_Id" Type="int" Nullable="false" />
+    <Property Name="Artikel_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="OerebDefinitionOerebKThema">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="*" />
+    <End Role="OerebKThema" Type="OerebLaw3.Store.OerebKThemaSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="OerebKThema">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinition">
+        <PropertyRef Name="OerebKThema_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OerebDefinitionRechtsstatus">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="*" />
+    <End Role="Rechtsstatus" Type="OerebLaw3.Store.RechtsstatusSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rechtsstatus">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinition">
+        <PropertyRef Name="Rechtsstatus_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OerebDefinitionArtCode">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="*" />
+    <End Role="ArtCode" Type="OerebLaw3.Store.ArtCodeSet" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="ArtCode">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinition">
+        <PropertyRef Name="ArtCode_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OerebDefinitionOerebDefinition">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="*" />
+    <End Role="OerebDefinition1" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="OerebDefinition1">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinition">
+        <PropertyRef Name="Parent_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RechtsvorschriftRechtsstatus">
+    <End Role="Rechtsvorschrift" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="*" />
+    <End Role="Rechtsstatus" Type="OerebLaw3.Store.RechtsstatusSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rechtsstatus">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rechtsvorschrift">
+        <PropertyRef Name="Rechtsstatus_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RechtsnormRechtsnormTyp">
+    <End Role="Rechtsnorm" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="*" />
+    <End Role="RechtsnormTyp" Type="OerebLaw3.Store.RechtsnormTypSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="RechtsnormTyp">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rechtsnorm">
+        <PropertyRef Name="RechtsnormTyp_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OerebDefinitionZustStelle">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="*" />
+    <End Role="ZustStelle" Type="OerebLaw3.Store.ZustStelleSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="ZustStelle">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinition">
+        <PropertyRef Name="ZustStelle_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RechtsnormZustStelle">
+    <End Role="Rechtsnorm" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="*" />
+    <End Role="ZustStelle" Type="OerebLaw3.Store.ZustStelleSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="ZustStelle">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rechtsnorm">
+        <PropertyRef Name="ZustStelle_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RechtsnormRechtsnorm">
+    <End Role="Rechtsnorm" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="*" />
+    <End Role="Rechtsnorm1" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Rechtsnorm1">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rechtsnorm">
+        <PropertyRef Name="Parent_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ArtikelRechtsnorm">
+    <End Role="Artikel" Type="OerebLaw3.Store.ArtikelSet" Multiplicity="*" />
+    <End Role="Rechtsnorm" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rechtsnorm">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Artikel">
+        <PropertyRef Name="Rechtsnorm_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OerebDefinitionRechtsvorschrift_OerebDefinition">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="1" />
+    <End Role="OerebDefinitionRechtsvorschrift" Type="OerebLaw3.Store.OerebDefinitionRechtsvorschrift" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OerebDefinition">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinitionRechtsvorschrift">
+        <PropertyRef Name="OerebDefinition_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OerebDefinitionRechtsvorschrift_Rechtsvorschrift">
+    <End Role="OerebDefinitionRechtsvorschrift" Type="OerebLaw3.Store.OerebDefinitionRechtsvorschrift" Multiplicity="*" />
+    <End Role="Rechtsvorschrift" Type="OerebLaw3.Store.RechtsnormSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Rechtsvorschrift">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinitionRechtsvorschrift">
+        <PropertyRef Name="Rechtsnorm_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OerebDefinitionArtikel_OerebDefinition">
+    <End Role="OerebDefinition" Type="OerebLaw3.Store.OerebDefinitionSet" Multiplicity="1" />
+    <End Role="OerebDefinitionArtikel" Type="OerebLaw3.Store.OerebDefinitionArtikel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OerebDefinition">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinitionArtikel">
+        <PropertyRef Name="OerebDefinition_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OerebDefinitionArtikel_Artikel">
+    <End Role="OerebDefinitionArtikel" Type="OerebLaw3.Store.OerebDefinitionArtikel" Multiplicity="*" />
+    <End Role="Artikel" Type="OerebLaw3.Store.ArtikelSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Artikel">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OerebDefinitionArtikel">
+        <PropertyRef Name="Artikel_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="OerebLaw3" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="OerebLaw3Container" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="OerebDefinitionSet" EntityType="OerebLaw3.OerebDefinition" />
+          <AssociationSet Name="OerebDefinitionRechtsvorschrift" Association="OerebLaw3.OerebDefinitionRechtsvorschrift">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+          </AssociationSet>
+          <EntitySet Name="ZustStelleSet" EntityType="OerebLaw3.ZustStelle" />
+          <EntitySet Name="RechtsstatusSet" EntityType="OerebLaw3.Rechtsstatus" />
+          <EntitySet Name="OerebKThemaSet" EntityType="OerebLaw3.OerebKThema" />
+          <AssociationSet Name="OerebDefinitionOerebKThema" Association="OerebLaw3.OerebDefinitionOerebKThema">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+            <End Role="OerebKThema" EntitySet="OerebKThemaSet" />
+          </AssociationSet>
+          <AssociationSet Name="OerebDefinitionRechtsstatus" Association="OerebLaw3.OerebDefinitionRechtsstatus">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+            <End Role="Rechtsstatus" EntitySet="RechtsstatusSet" />
+          </AssociationSet>
+          <EntitySet Name="ArtCodeSet" EntityType="OerebLaw3.ArtCode" />
+          <AssociationSet Name="OerebDefinitionArtCode" Association="OerebLaw3.OerebDefinitionArtCode">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+            <End Role="ArtCode" EntitySet="ArtCodeSet" />
+          </AssociationSet>
+          <AssociationSet Name="OerebDefinitionOerebDefinition" Association="OerebLaw3.OerebDefinitionOerebDefinition">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+            <End Role="OerebDefinition1" EntitySet="OerebDefinitionSet" />
+          </AssociationSet>
+          <EntitySet Name="ArtikelSet" EntityType="OerebLaw3.Artikel" />
+          <EntitySet Name="RechtsnormSet" EntityType="OerebLaw3.Rechtsnorm" />
+          <AssociationSet Name="RechtsvorschriftRechtsstatus" Association="OerebLaw3.RechtsvorschriftRechtsstatus">
+            <End Role="Rechtsvorschrift" EntitySet="RechtsnormSet" />
+            <End Role="Rechtsstatus" EntitySet="RechtsstatusSet" />
+          </AssociationSet>
+          <EntitySet Name="RechtsnormTypSet" EntityType="OerebLaw3.RechtsnormTyp" />
+          <AssociationSet Name="RechtsnormRechtsnormTyp" Association="OerebLaw3.RechtsnormRechtsnormTyp">
+            <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+            <End Role="RechtsnormTyp" EntitySet="RechtsnormTypSet" />
+          </AssociationSet>
+          <AssociationSet Name="OerebDefinitionZustStelle" Association="OerebLaw3.OerebDefinitionZustStelle">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+            <End Role="ZustStelle" EntitySet="ZustStelleSet" />
+          </AssociationSet>
+          <AssociationSet Name="RechtsnormZustStelle" Association="OerebLaw3.RechtsnormZustStelle">
+            <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+            <End Role="ZustStelle" EntitySet="ZustStelleSet" />
+          </AssociationSet>
+          <AssociationSet Name="OerebDefinitionArtikel" Association="OerebLaw3.OerebDefinitionArtikel">
+            <End Role="OerebDefinition" EntitySet="OerebDefinitionSet" />
+            <End Role="Artikel" EntitySet="ArtikelSet" />
+          </AssociationSet>
+          <AssociationSet Name="RechtsnormRechtsnorm" Association="OerebLaw3.RechtsnormRechtsnorm">
+            <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+            <End Role="Rechtsnorm1" EntitySet="RechtsnormSet" />
+          </AssociationSet>
+          <AssociationSet Name="ArtikelRechtsnorm" Association="OerebLaw3.ArtikelRechtsnorm">
+            <End Role="Artikel" EntitySet="ArtikelSet" />
+            <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="OerebDefinition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Aussage" Nullable="false" />
+          <Property Type="String" Name="UmschreibungRaumbezug" Nullable="true" />
+          <NavigationProperty Name="Rechtsnorm" Relationship="OerebLaw3.OerebDefinitionRechtsvorschrift" FromRole="OerebDefinition" ToRole="Rechtsvorschrift" />
+          <Property Type="String" Name="LinkGeobasisdaten" Nullable="true" />
+          <NavigationProperty Name="OerebKThema" Relationship="OerebLaw3.OerebDefinitionOerebKThema" FromRole="OerebDefinition" ToRole="OerebKThema" />
+          <NavigationProperty Name="Rechtsstatus" Relationship="OerebLaw3.OerebDefinitionRechtsstatus" FromRole="OerebDefinition" ToRole="Rechtsstatus" />
+          <NavigationProperty Name="ArtCode" Relationship="OerebLaw3.OerebDefinitionArtCode" FromRole="OerebDefinition" ToRole="ArtCode" />
+          <Property Type="String" Name="ArtCodeliste" Nullable="true" />
+          <NavigationProperty Name="Parent" Relationship="OerebLaw3.OerebDefinitionOerebDefinition" FromRole="OerebDefinition" ToRole="OerebDefinition1" />
+          <NavigationProperty Name="Children" Relationship="OerebLaw3.OerebDefinitionOerebDefinition" FromRole="OerebDefinition1" ToRole="OerebDefinition" />
+          <NavigationProperty Name="ZustStelle" Relationship="OerebLaw3.OerebDefinitionZustStelle" FromRole="OerebDefinition" ToRole="ZustStelle" />
+          <NavigationProperty Name="Artikel" Relationship="OerebLaw3.OerebDefinitionArtikel" FromRole="OerebDefinition" ToRole="Artikel" />
+          <Property Type="Boolean" Name="IsLive" Nullable="true" />
+          <Property Type="DateTime" Name="VisibilityDate" Nullable="true" />
+          <Property Type="String" Name="Source" Nullable="true" />
+          <Property Type="String" Name="OriginalId" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Rechtsnorm">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <NavigationProperty Name="OerebDefinition" Relationship="OerebLaw3.OerebDefinitionRechtsvorschrift" FromRole="Rechtsvorschrift" ToRole="OerebDefinition" />
+          <Property Type="String" Name="LinkLexFindId" Nullable="true" />
+          <Property Type="String" Name="LinkLexFindKtSysNr" Nullable="true" />
+          <Property Type="String" Name="Titel" Nullable="false" />
+          <Property Type="String" Name="OffiziellerTitel" Nullable="true" />
+          <Property Type="String" Name="Abkuerzung" Nullable="true" />
+          <Property Type="String" Name="OffizielleNr" Nullable="true" />
+          <Property Type="String" Name="Kanton" Nullable="true" />
+          <Property Type="Int32" Name="Gemeinde" Nullable="true" />
+          <Property Type="Binary" Name="DokumentBinary" Nullable="true" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Url" Nullable="true" />
+          <Property Type="DateTime" Name="PubliziertAb" Nullable="false" />
+          <NavigationProperty Name="Rechtsstatus" Relationship="OerebLaw3.RechtsvorschriftRechtsstatus" FromRole="Rechtsvorschrift" ToRole="Rechtsstatus" />
+          <NavigationProperty Name="RechtsnormTyp" Relationship="OerebLaw3.RechtsnormRechtsnormTyp" FromRole="Rechtsnorm" ToRole="RechtsnormTyp" />
+          <NavigationProperty Name="ZustStelle" Relationship="OerebLaw3.RechtsnormZustStelle" FromRole="Rechtsnorm" ToRole="ZustStelle" />
+          <Property Type="Boolean" Name="IsLive" Nullable="true" />
+          <Property Type="DateTime" Name="VisibilityDate" Nullable="true" />
+          <NavigationProperty Name="Parent" Relationship="OerebLaw3.RechtsnormRechtsnorm" FromRole="Rechtsnorm" ToRole="Rechtsnorm1" />
+          <NavigationProperty Name="Children" Relationship="OerebLaw3.RechtsnormRechtsnorm" FromRole="Rechtsnorm1" ToRole="Rechtsnorm" />
+          <Property Type="String" Name="ArtikelBezeichner" Nullable="true" />
+          <NavigationProperty Name="Artikel" Relationship="OerebLaw3.ArtikelRechtsnorm" FromRole="Rechtsnorm" ToRole="Artikel" />
+          <Property Type="String" Name="Source" Nullable="true" />
+          <Property Type="String" Name="OriginalId" Nullable="true" />
+        </EntityType>
+        <Association Name="OerebDefinitionRechtsvorschrift">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsvorschrift" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Artikel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="String" Name="Nr" Nullable="false" />
+          <Property Type="String" Name="Text" Nullable="true" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="OerebDefinition" Relationship="OerebLaw3.OerebDefinitionArtikel" FromRole="Artikel" ToRole="OerebDefinition" />
+          <Property Type="Boolean" Name="IsLive" Nullable="true" />
+          <Property Type="DateTime" Name="VisibilityDate" Nullable="true" />
+          <NavigationProperty Name="Rechtsnorm" Relationship="OerebLaw3.ArtikelRechtsnorm" FromRole="Artikel" ToRole="Rechtsnorm" />
+          <Property Type="String" Name="Source" Nullable="true" />
+          <Property Type="String" Name="OriginalId" Nullable="true" />
+        </EntityType>
+        <EntityType Name="ZustStelle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Int32" />
+          <Property Name="Name" Nullable="false" Type="String" />
+          <Property Name="Url" Nullable="true" Type="String" />
+          <NavigationProperty Name="OerebDefinition" Relationship="OerebLaw3.OerebDefinitionZustStelle" FromRole="ZustStelle" ToRole="OerebDefinition" />
+          <NavigationProperty Name="Rechtsnorm" Relationship="OerebLaw3.RechtsnormZustStelle" FromRole="ZustStelle" ToRole="Rechtsnorm" />
+          <Property Type="String" Name="Kanton" Nullable="true" />
+          <Property Type="Int32" Name="Gemeinde" Nullable="true" />
+          <Property Type="String" Name="Abkuerzung" Nullable="true" />
+          <Property Type="String" Name="Source" Nullable="true" />
+          <Property Type="String" Name="OriginalId" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Rechtsstatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Bezeichnung" Nullable="false" />
+          <NavigationProperty Name="OerebDefinition" Relationship="OerebLaw3.OerebDefinitionRechtsstatus" FromRole="Rechtsstatus" ToRole="OerebDefinition" />
+          <NavigationProperty Name="Rechtsnorm" Relationship="OerebLaw3.RechtsvorschriftRechtsstatus" FromRole="Rechtsstatus" ToRole="Rechtsvorschrift" />
+        </EntityType>
+        <EntityType Name="OerebKThema">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <NavigationProperty Name="OerebDefinition" Relationship="OerebLaw3.OerebDefinitionOerebKThema" FromRole="OerebKThema" ToRole="OerebDefinition" />
+          <Property Type="String" Name="Beschreibung" Nullable="false" />
+        </EntityType>
+        <Association Name="OerebDefinitionOerebKThema">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.OerebKThema" Role="OerebKThema" Multiplicity="1" />
+        </Association>
+        <Association Name="OerebDefinitionRechtsstatus">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.Rechtsstatus" Role="Rechtsstatus" Multiplicity="1" />
+        </Association>
+        <EntityType Name="ArtCode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Wert" Nullable="false" />
+          <NavigationProperty Name="OerebDefinition" Relationship="OerebLaw3.OerebDefinitionArtCode" FromRole="ArtCode" ToRole="OerebDefinition" />
+        </EntityType>
+        <Association Name="OerebDefinitionArtCode">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.ArtCode" Role="ArtCode" Multiplicity="0..1" />
+        </Association>
+        <Association Name="OerebDefinitionOerebDefinition">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition1" Multiplicity="0..1" />
+        </Association>
+        <Association Name="RechtsvorschriftRechtsstatus">
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsvorschrift" Multiplicity="*" />
+          <End Type="OerebLaw3.Rechtsstatus" Role="Rechtsstatus" Multiplicity="1" />
+        </Association>
+        <EntityType Name="RechtsnormTyp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Bezeichnung" Nullable="false" />
+          <NavigationProperty Name="Rechtsnorm" Relationship="OerebLaw3.RechtsnormRechtsnormTyp" FromRole="RechtsnormTyp" ToRole="Rechtsnorm" />
+        </EntityType>
+        <Association Name="RechtsnormRechtsnormTyp">
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsnorm" Multiplicity="*" />
+          <End Type="OerebLaw3.RechtsnormTyp" Role="RechtsnormTyp" Multiplicity="1" />
+        </Association>
+        <Association Name="OerebDefinitionZustStelle">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.ZustStelle" Role="ZustStelle" Multiplicity="1" />
+        </Association>
+        <Association Name="RechtsnormZustStelle">
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsnorm" Multiplicity="*" />
+          <End Type="OerebLaw3.ZustStelle" Role="ZustStelle" Multiplicity="1" />
+        </Association>
+        <Association Name="OerebDefinitionArtikel">
+          <End Type="OerebLaw3.OerebDefinition" Role="OerebDefinition" Multiplicity="*" />
+          <End Type="OerebLaw3.Artikel" Role="Artikel" Multiplicity="*" />
+        </Association>
+        <Association Name="RechtsnormRechtsnorm">
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsnorm" Multiplicity="*" />
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsnorm1" Multiplicity="0..1" />
+        </Association>
+        <Association Name="ArtikelRechtsnorm">
+          <End Type="OerebLaw3.Artikel" Role="Artikel" Multiplicity="*" />
+          <End Type="OerebLaw3.Rechtsnorm" Role="Rechtsnorm" Multiplicity="1" />
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="OerebLaw3StoreContainer" CdmEntityContainer="OerebLaw3Container">
+    <EntitySetMapping Name="OerebDefinitionSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.OerebDefinition)">
+        <MappingFragment StoreEntitySet="OerebDefinitionSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Aussage" ColumnName="Aussage" />
+          <ScalarProperty Name="UmschreibungRaumbezug" ColumnName="UmschreibungRaumbezug" />
+          <ScalarProperty Name="LinkGeobasisdaten" ColumnName="LinkGeobasisdaten" />
+          <ScalarProperty Name="ArtCodeliste" ColumnName="ArtCodeliste" />
+          <ScalarProperty Name="IsLive" ColumnName="IsLive" />
+          <ScalarProperty Name="VisibilityDate" ColumnName="VisibilityDate" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="OriginalId" ColumnName="OriginalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ZustStelleSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.ZustStelle)">
+        <MappingFragment StoreEntitySet="ZustStelleSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="Kanton" ColumnName="Kanton" />
+          <ScalarProperty Name="Gemeinde" ColumnName="Gemeinde" />
+          <ScalarProperty Name="Abkuerzung" ColumnName="Abkuerzung" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="OriginalId" ColumnName="OriginalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RechtsstatusSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.Rechtsstatus)">
+        <MappingFragment StoreEntitySet="RechtsstatusSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OerebKThemaSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.OerebKThema)">
+        <MappingFragment StoreEntitySet="OerebKThemaSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Beschreibung" ColumnName="Beschreibung" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ArtCodeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.ArtCode)">
+        <MappingFragment StoreEntitySet="ArtCodeSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Wert" ColumnName="Wert" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ArtikelSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.Artikel)">
+        <MappingFragment StoreEntitySet="ArtikelSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nr" ColumnName="Nr" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="IsLive" ColumnName="IsLive" />
+          <ScalarProperty Name="VisibilityDate" ColumnName="VisibilityDate" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="OriginalId" ColumnName="OriginalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RechtsnormSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.Rechtsnorm)">
+        <MappingFragment StoreEntitySet="RechtsnormSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LinkLexFindId" ColumnName="LinkLexFindId" />
+          <ScalarProperty Name="LinkLexFindKtSysNr" ColumnName="LinkLexFindKtSysNr" />
+          <ScalarProperty Name="Titel" ColumnName="Titel" />
+          <ScalarProperty Name="OffiziellerTitel" ColumnName="OffiziellerTitel" />
+          <ScalarProperty Name="Abkuerzung" ColumnName="Abkuerzung" />
+          <ScalarProperty Name="OffizielleNr" ColumnName="OffizielleNr" />
+          <ScalarProperty Name="Kanton" ColumnName="Kanton" />
+          <ScalarProperty Name="Gemeinde" ColumnName="Gemeinde" />
+          <ScalarProperty Name="DokumentBinary" ColumnName="DokumentBinary" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="PubliziertAb" ColumnName="PubliziertAb" />
+          <ScalarProperty Name="IsLive" ColumnName="IsLive" />
+          <ScalarProperty Name="VisibilityDate" ColumnName="VisibilityDate" />
+          <ScalarProperty Name="ArtikelBezeichner" ColumnName="ArtikelBezeichner" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="OriginalId" ColumnName="OriginalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RechtsnormTypSet">
+      <EntityTypeMapping TypeName="IsTypeOf(OerebLaw3.RechtsnormTyp)">
+        <MappingFragment StoreEntitySet="RechtsnormTypSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="OerebDefinitionRechtsvorschrift" TypeName="OerebLaw3.OerebDefinitionRechtsvorschrift" StoreEntitySet="OerebDefinitionRechtsvorschrift">
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="OerebDefinition_Id" />
+      </EndProperty>
+      <EndProperty Name="Rechtsvorschrift">
+        <ScalarProperty Name="Id" ColumnName="Rechtsnorm_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OerebDefinitionOerebKThema" TypeName="OerebLaw3.OerebDefinitionOerebKThema" StoreEntitySet="OerebDefinitionSet">
+      <EndProperty Name="OerebKThema">
+        <ScalarProperty Name="Id" ColumnName="OerebKThema_Id" />
+      </EndProperty>
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OerebDefinitionRechtsstatus" TypeName="OerebLaw3.OerebDefinitionRechtsstatus" StoreEntitySet="OerebDefinitionSet">
+      <EndProperty Name="Rechtsstatus">
+        <ScalarProperty Name="Id" ColumnName="Rechtsstatus_Id" />
+      </EndProperty>
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OerebDefinitionArtCode" TypeName="OerebLaw3.OerebDefinitionArtCode" StoreEntitySet="OerebDefinitionSet">
+      <EndProperty Name="ArtCode">
+        <ScalarProperty Name="Id" ColumnName="ArtCode_Id" />
+      </EndProperty>
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="ArtCode_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OerebDefinitionOerebDefinition" TypeName="OerebLaw3.OerebDefinitionOerebDefinition" StoreEntitySet="OerebDefinitionSet">
+      <EndProperty Name="OerebDefinition1">
+        <ScalarProperty Name="Id" ColumnName="Parent_Id" />
+      </EndProperty>
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Parent_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RechtsvorschriftRechtsstatus" TypeName="OerebLaw3.RechtsvorschriftRechtsstatus" StoreEntitySet="RechtsnormSet">
+      <EndProperty Name="Rechtsstatus">
+        <ScalarProperty Name="Id" ColumnName="Rechtsstatus_Id" />
+      </EndProperty>
+      <EndProperty Name="Rechtsvorschrift">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RechtsnormRechtsnormTyp" TypeName="OerebLaw3.RechtsnormRechtsnormTyp" StoreEntitySet="RechtsnormSet">
+      <EndProperty Name="RechtsnormTyp">
+        <ScalarProperty Name="Id" ColumnName="RechtsnormTyp_Id" />
+      </EndProperty>
+      <EndProperty Name="Rechtsnorm">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OerebDefinitionZustStelle" TypeName="OerebLaw3.OerebDefinitionZustStelle" StoreEntitySet="OerebDefinitionSet">
+      <EndProperty Name="ZustStelle">
+        <ScalarProperty Name="Id" ColumnName="ZustStelle_Id" />
+      </EndProperty>
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RechtsnormZustStelle" TypeName="OerebLaw3.RechtsnormZustStelle" StoreEntitySet="RechtsnormSet">
+      <EndProperty Name="ZustStelle">
+        <ScalarProperty Name="Id" ColumnName="ZustStelle_Id" />
+      </EndProperty>
+      <EndProperty Name="Rechtsnorm">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="OerebDefinitionArtikel" TypeName="OerebLaw3.OerebDefinitionArtikel" StoreEntitySet="OerebDefinitionArtikel">
+      <EndProperty Name="OerebDefinition">
+        <ScalarProperty Name="Id" ColumnName="OerebDefinition_Id" />
+      </EndProperty>
+      <EndProperty Name="Artikel">
+        <ScalarProperty Name="Id" ColumnName="Artikel_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RechtsnormRechtsnorm" TypeName="OerebLaw3.RechtsnormRechtsnorm" StoreEntitySet="RechtsnormSet">
+      <EndProperty Name="Rechtsnorm1">
+        <ScalarProperty Name="Id" ColumnName="Parent_Id" />
+      </EndProperty>
+      <EndProperty Name="Rechtsnorm">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Parent_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ArtikelRechtsnorm" TypeName="OerebLaw3.ArtikelRechtsnorm" StoreEntitySet="ArtikelSet">
+      <EndProperty Name="Rechtsnorm">
+        <ScalarProperty Name="Id" ColumnName="Rechtsnorm_Id" />
+      </EndProperty>
+      <EndProperty Name="Artikel">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e727827c7d62489abf9b694688ed21e3" Name="Diagram1">
+        <EntityTypeShape EntityType="OerebLaw3.OerebDefinition" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.Rechtsnorm" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.Artikel" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.ZustStelle" Width="1.5" PointX="5.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.Rechtsstatus" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.OerebKThema" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.ArtCode" Width="1.5" PointX="3" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OerebLaw3.RechtsnormTyp" Width="1.5" PointX="5.25" PointY="13.875" IsExpanded="true" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionRechtsvorschrift" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionOerebKThema" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionRechtsstatus" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionArtCode" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionOerebDefinition" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.RechtsvorschriftRechtsstatus" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.RechtsvorschriftArtikel" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.RechtsnormRechtsnormTyp" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.RechtsnormRechtsnorm" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionZustStelle" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.RechtsnormZustStelle" ManuallyRouted="false" />
+        <AssociationConnector Association="OerebLaw3.OerebDefinitionArtikel" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

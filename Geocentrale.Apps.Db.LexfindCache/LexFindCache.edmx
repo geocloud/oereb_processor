@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LexFindCache.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="LexFindCacheStoreContainer">
+    <EntitySet Name="RechtsnormSet" EntityType="LexFindCache.Store.RechtsnormSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RechtsnormAusserKraftSet" EntityType="LexFindCache.Store.RechtsnormAusserKraftSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="RechtsnormRechtsnormAusserKraft" Association="LexFindCache.Store.RechtsnormRechtsnormAusserKraft">
+      <End Role="Rechtsnorm" EntitySet="RechtsnormSet" />
+      <End Role="RechtsnormAusserKraft" EntitySet="RechtsnormAusserKraftSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="RechtsnormSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Kanton" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="SysNr" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Infkrafttreten" Type="datetime" Nullable="true" />
+    <Property Name="LexFindId" Type="int" Nullable="true" />
+    <Property Name="LexFindUrl" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OrigUrl" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="InKraftSeit" Type="datetime" Nullable="true" />
+    <Property Name="Abk" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Titel" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="AusserKraft" Type="bit" Nullable="true" />
+    <Property Name="IsUpdated" Type="bit" Nullable="true" />
+    <Property Name="IsNew" Type="bit" Nullable="true" />
+    <Property Name="SeenInNewestSync" Type="bit" Nullable="true" />
+  </EntityType>
+  <EntityType Name="RechtsnormAusserKraftSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LexFindId" Type="int" Nullable="true" />
+    <Property Name="LexFindUrl" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="InKraftVon" Type="datetime" Nullable="true" />
+    <Property Name="InKraftBis" Type="datetime" Nullable="true" />
+    <Property Name="FormlosBerichtigtAm" Type="datetime" Nullable="true" />
+    <Property Name="RechtsnormId" Type="int" Nullable="false" />
+    <Property Name="IsNew" Type="bit" Nullable="true" />
+    <Property Name="SeenInNewestSync" Type="bit" Nullable="true" />
+  </EntityType>
+  <Association Name="RechtsnormRechtsnormAusserKraft">
+    <End Role="Rechtsnorm" Type="LexFindCache.Store.RechtsnormSet" Multiplicity="1" />
+    <End Role="RechtsnormAusserKraft" Type="LexFindCache.Store.RechtsnormAusserKraftSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rechtsnorm">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RechtsnormAusserKraft">
+        <PropertyRef Name="RechtsnormId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="LexFindCache" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="LexFindCacheContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="RechtsnormLFSet" EntityType="LexFindCache.RechtsnormLF" />
+          <EntitySet Name="RechtsnormAusserKraftSet" EntityType="LexFindCache.RechtsnormAusserKraft" />
+          <AssociationSet Name="RechtsnormRechtsnormAusserKraft" Association="LexFindCache.RechtsnormRechtsnormAusserKraft">
+            <End Role="Rechtsnorm" EntitySet="RechtsnormLFSet" />
+            <End Role="RechtsnormAusserKraft" EntitySet="RechtsnormAusserKraftSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="RechtsnormLF">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Kanton" Nullable="true" />
+          <Property Type="String" Name="SysNr" Nullable="true" />
+          <Property Type="DateTime" Name="Infkrafttreten" Nullable="true" />
+          <Property Type="Int32" Name="LexFindId" Nullable="true" />
+          <Property Type="String" Name="LexFindUrl" Nullable="true" />
+          <Property Type="String" Name="OrigUrl" Nullable="true" />
+          <Property Type="DateTime" Name="InKraftSeit" Nullable="true" />
+          <NavigationProperty Name="RechtsnormAusserKraft" Relationship="LexFindCache.RechtsnormRechtsnormAusserKraft" FromRole="Rechtsnorm" ToRole="RechtsnormAusserKraft" />
+          <Property Type="String" Name="Abk" Nullable="true" />
+          <Property Type="String" Name="Titel" Nullable="true" />
+          <Property Type="Boolean" Name="AusserKraft" Nullable="true" />
+          <Property Type="Boolean" Name="IsUpdated" Nullable="true" />
+          <Property Type="Boolean" Name="IsNew" />
+          <Property Type="Boolean" Name="SeenInNewestSync" Nullable="true" />
+        </EntityType>
+        <EntityType Name="RechtsnormAusserKraft">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LexFindId" Nullable="true" />
+          <Property Type="String" Name="LexFindUrl" Nullable="true" />
+          <Property Type="DateTime" Name="InKraftVon" Nullable="true" />
+          <Property Type="DateTime" Name="InKraftBis" Nullable="true" />
+          <Property Type="DateTime" Name="FormlosBerichtigtAm" Nullable="true" />
+          <NavigationProperty Name="Rechtsnorm" Relationship="LexFindCache.RechtsnormRechtsnormAusserKraft" FromRole="RechtsnormAusserKraft" ToRole="Rechtsnorm" />
+          <Property Type="Int32" Name="RechtsnormId" Nullable="false" />
+          <Property Type="Boolean" Name="IsNew" Nullable="true" />
+          <Property Type="Boolean" Name="SeenInNewestSync" Nullable="true" />
+        </EntityType>
+        <Association Name="RechtsnormRechtsnormAusserKraft">
+          <End Type="LexFindCache.RechtsnormLF" Role="Rechtsnorm" Multiplicity="1" />
+          <End Type="LexFindCache.RechtsnormAusserKraft" Role="RechtsnormAusserKraft" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rechtsnorm">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RechtsnormAusserKraft">
+              <PropertyRef Name="RechtsnormId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LexFindCacheStoreContainer" CdmEntityContainer="LexFindCacheContainer">
+    <EntitySetMapping Name="RechtsnormLFSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LexFindCache.RechtsnormLF)">
+        <MappingFragment StoreEntitySet="RechtsnormSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Kanton" ColumnName="Kanton" />
+          <ScalarProperty Name="SysNr" ColumnName="SysNr" />
+          <ScalarProperty Name="Infkrafttreten" ColumnName="Infkrafttreten" />
+          <ScalarProperty Name="LexFindId" ColumnName="LexFindId" />
+          <ScalarProperty Name="LexFindUrl" ColumnName="LexFindUrl" />
+          <ScalarProperty Name="OrigUrl" ColumnName="OrigUrl" />
+          <ScalarProperty Name="InKraftSeit" ColumnName="InKraftSeit" />
+          <ScalarProperty Name="Abk" ColumnName="Abk" />
+          <ScalarProperty Name="Titel" ColumnName="Titel" />
+          <ScalarProperty Name="AusserKraft" ColumnName="AusserKraft" />
+          <ScalarProperty Name="IsUpdated" ColumnName="IsUpdated" />
+          <ScalarProperty Name="IsNew" ColumnName="IsNew" />
+          <ScalarProperty Name="SeenInNewestSync" ColumnName="SeenInNewestSync" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RechtsnormAusserKraftSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LexFindCache.RechtsnormAusserKraft)">
+        <MappingFragment StoreEntitySet="RechtsnormAusserKraftSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LexFindId" ColumnName="LexFindId" />
+          <ScalarProperty Name="LexFindUrl" ColumnName="LexFindUrl" />
+          <ScalarProperty Name="InKraftVon" ColumnName="InKraftVon" />
+          <ScalarProperty Name="InKraftBis" ColumnName="InKraftBis" />
+          <ScalarProperty Name="FormlosBerichtigtAm" ColumnName="FormlosBerichtigtAm" />
+          <ScalarProperty Name="RechtsnormId" ColumnName="RechtsnormId" />
+          <ScalarProperty Name="IsNew" ColumnName="IsNew" />
+          <ScalarProperty Name="SeenInNewestSync" ColumnName="SeenInNewestSync" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="cbdd67143e9e4c61a391709368cac1a5" Name="Diagram1">
+        <EntityTypeShape EntityType="LexFindCache.Rechtsnorm" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="LexFindCache.RechtsnormAusserKraft" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <AssociationConnector Association="LexFindCache.RechtsnormRechtsnormAusserKraft" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
