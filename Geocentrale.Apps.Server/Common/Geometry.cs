@@ -79,6 +79,17 @@ namespace Geocentrale.Apps.Server.Common
             return bufferGeometry.ExportToGML();
         }
 
+        public static string BufferWkt(string featureGeometry, double offset)
+        {
+            InitializeOgr();
+            OSGeo.OGR.Geometry featureGeometryOGR = GetOGRGeometryFromString(featureGeometry);
+            OSGeo.OGR.Geometry bufferGeometry = featureGeometryOGR.Buffer(offset, 10);
+
+            string wkt;
+            bufferGeometry.ExportToWkt(out wkt);        
+            return wkt;
+        }
+
         //[Obsolete]
         public static string GetGeometry(string featureGeometry, string format, int epsgCode = 0)
         {
@@ -244,6 +255,11 @@ namespace Geocentrale.Apps.Server.Common
             {
                 double area = intersectionGeometry.Area();
 
+                if (((GAGeoClass)involvedFeature.GAClass).SpatialReferenceEpsg == 3857)
+                {
+                    area = TransformGeometry(intersectionGeometry, 3857, 2056).Area();
+                }
+
                 if (!involvedFeature.GAClass.AttributeSpecs.Any(x => x.Name == GeometryPartValueAttributeName))
                 {
                     involvedFeature.GAClass.AttributeSpecs.Add(ConstAttributeSpecs[GeometryPartValueAttributeName]);
@@ -252,6 +268,11 @@ namespace Geocentrale.Apps.Server.Common
                 involvedFeature[GeometryPartValueAttributeName] = area;
 
                 double inputFeatureArea = inputGeometry.Area();
+
+                if (((GAGeoClass)inputFeature.GAClass).SpatialReferenceEpsg == 3857)
+                {
+                    inputFeatureArea = TransformGeometry(inputGeometry, 3857, 2056).Area();
+                }
 
                 if (inputFeatureArea != 0)
                 {
@@ -271,6 +292,11 @@ namespace Geocentrale.Apps.Server.Common
                 }
 
                 involvedFeature[GeometryPartValueAttributeName] = intersectionGeometry.Length();
+
+                if (((GAGeoClass)involvedFeature.GAClass).SpatialReferenceEpsg == 3857)
+                {
+                    involvedFeature[GeometryPartValueAttributeName] = TransformGeometry(intersectionGeometry, 3857, 2056).Length();
+                }
             }
             else
             {
@@ -435,6 +461,22 @@ namespace Geocentrale.Apps.Server.Common
             }
 
             return false;
+        }
+
+        public static OSGeo.OGR.Geometry TransformGeometry(OSGeo.OGR.Geometry srcGeometry, Int32 srcCrs, Int32 targetCrs)
+        {
+            OSGeo.OGR.Geometry transformedGeometry = srcGeometry.Clone();
+
+            var srcSpatialRef = new SpatialReference(String.Empty);
+            srcSpatialRef.ImportFromEPSG(srcCrs);
+
+            var targetSpatialRef = new SpatialReference(String.Empty);
+            targetSpatialRef.ImportFromEPSG(targetCrs);
+
+            transformedGeometry.AssignSpatialReference(srcSpatialRef);
+            transformedGeometry.TransformTo(targetSpatialRef);
+
+            return transformedGeometry;
         }
     }
 }

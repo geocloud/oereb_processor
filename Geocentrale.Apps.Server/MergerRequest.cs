@@ -43,9 +43,9 @@ namespace Geocentrale.Apps.Server
 
         #endregion
 
-        public Guid AppId { get; set; }
-        public Guid ModuleId { get; set; }
-        public Dictionary<string, dynamic> ModuleParameters { get; set; }
+        public Guid AppId { get; set; }                 //deprecated
+        public Guid ModuleId { get; set; }              //deprecated
+        public Dictionary<string, dynamic> ModuleParameters { get; set; }   //deprecated
         public List<JsonSelection> Selections { get; set; }
 
         public string Format { get; set; }
@@ -61,10 +61,18 @@ namespace Geocentrale.Apps.Server
         public bool ReportComplete { get; set; } = false;
         public bool ReportAppendixesAttached { get; set; } = false;
 
+        public GAObject InputObject { get; set; }
+        public List<GAObject> InvolvedObjects { get; set; }
+
+        public string Canton { get; set; } = "";
+
+        public bool Cache { get; set; } = true;
+
         public MergerRequest()
         {
             ModuleParameters = new Dictionary<string, dynamic>();
             QueryWithPseudoObject = false;
+            InvolvedObjects = new List<GAObject>();
         }
 
         public MergerRequest(string appId, string moduleId,bool adminMode, string[] baseLayers, string format, string project)
@@ -85,11 +93,17 @@ namespace Geocentrale.Apps.Server
         [Serializable]
         public class JsonSelection
         {
-            public Guid classId { get; set; }
+            public Guid classId { get; set; } //deprecated
             public GAFilter gaFilter { get; set; }
+            public GaObjectRaw gaObject { get; set; }
             public double buffer { get; set; }
         }
 
+        public class GaObjectRaw
+        {
+            public List<GAAttribute> Attributes { get; set; }
+        }
+        
         #region private 
 
         private static Guid GetGuid(string value)

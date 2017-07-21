@@ -9,7 +9,6 @@ using System.Xml;
 using Aspose.Words;
 using Aspose.Words.Saving;
 using Geocentrale.Apps.DataContracts;
-using Geocentrale.Apps.Server.Export.Oereb;
 using Geocentrale.Apps.Server.Helper;
 using Geocentrale.Common;
 using Geocentrale.DataAdaptors;
@@ -83,7 +82,7 @@ namespace Geocentrale.Apps.Server.Export
 
             if (LogEnabled)
             {
-                File.WriteAllText(Path.Combine(Path.GetTempPath(), String.Format("Extract_{0}.xml", Guid.NewGuid())), xmlContent, Encoding.Unicode);
+                File.WriteAllText(Path.Combine(Path.GetTempPath(), String.Format("Extract_{0}.xml", Guid.NewGuid())), xmlContent, Encoding.UTF8);
             }
 
             return ReportBuilder.GeneratePdf(xmlContent.TrimStart(), mergerRequest.ReportComplete, mergerRequest.ReportAppendixesAttached);
@@ -100,7 +99,7 @@ namespace Geocentrale.Apps.Server.Export
 
             if (LogEnabled)
             {
-                File.WriteAllText(Path.Combine(Path.GetTempPath(), $"Extract_{Guid.NewGuid()}.xml" ), xmlContent, Encoding.Unicode);
+                File.WriteAllText(Path.Combine(Path.GetTempPath(), $"Extract_{Guid.NewGuid()}.xml" ), xmlContent, Encoding.UTF8);
             }
 
             var docContent = ReportBuilder.Generate(xmlContent.TrimStart(), "docx", mergerRequest.ReportComplete, false); //attached = true is not possible because we use the word format to generate pdfA1a

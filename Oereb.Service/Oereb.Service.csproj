@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.2.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.2.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1DE1D884-E2E5-44F1-AEE9-7E94FAE1850F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Oereb.Service</RootNamespace>
+    <AssemblyName>Oereb.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxMin, Version=5.2.5021.16390, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Common.1.1.63\lib\net45\AjaxMin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspose.Words, Version=15.6.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Words.15.6.0\lib\net3.5-client\Aspose.Words.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.0.5022.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telerik.Reporting.10.2.16.1026\lib\Net45\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="gdalconst_csharp, Version=1.0.5980.33660, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.1.10.7\lib\net45\gdalconst_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="gdal_csharp, Version=1.0.5980.33659, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.1.10.7\lib\net45\gdal_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="geocentrale-GDAL, Version=1.10.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.1.10.7\lib\net45\geocentrale-GDAL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="geocentrale-GDAL.Native, Version=1.10.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.Native.1.10.7\lib\net45\geocentrale-GDAL.Native.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Apps.DataContracts, Version=1.6.52.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Apps.DataContracts.1.6.52\lib\net45\Geocentrale.Apps.DataContracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Common, Version=1.1.63.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Common.1.1.63\lib\net45\Geocentrale.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Common.Spatial, Version=1.0.33.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Common.Spatial.1.0.33\lib\net45\Geocentrale.Common.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ConfigProcessor, Version=1.8.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ConfigProcessor.1.8.7\lib\net45\Geocentrale.ConfigProcessor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ConfigProcessor.DataSet, Version=1.8.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ConfigProcessor.DataSet.1.8.7\lib\net45\Geocentrale.ConfigProcessor.DataSet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ConfigProcessor.GeoDataSet, Version=1.8.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ConfigProcessor.Relation.1.8.7\lib\net45\Geocentrale.ConfigProcessor.GeoDataSet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ConfigProcessor.LocalizedLabel, Version=1.7.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ConfigProcessor.LocalizedLabel.1.7.12\lib\net45\Geocentrale.ConfigProcessor.LocalizedLabel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ConfigProcessor.Relation, Version=1.8.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ConfigProcessor.Relation.1.8.7\lib\net45\Geocentrale.ConfigProcessor.Relation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ConfigProcessor.Validations, Version=0.2.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ConfigProcessor.Validations.0.2.15\lib\net45\Geocentrale.ConfigProcessor.Validations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Controller, Version=0.2.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Controller.0.2.8\lib\net45\Geocentrale.Controller.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors, Version=1.7.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.1.7.26\lib\net45\Geocentrale.DataAdaptors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.ArcgisServerRestAdaptor, Version=1.7.46.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.ArcgisServerRestAdaptor.1.7.46\lib\net45\Geocentrale.DataAdaptors.ArcgisServerRestAdaptor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.Common, Version=1.7.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataOperators.1.7.26\lib\net45\Geocentrale.DataAdaptors.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Dataadaptors.Contracts, Version=1.7.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataOperators.1.7.26\lib\net45\Geocentrale.Dataadaptors.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.Geometry, Version=1.7.26.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.Geometry.1.7.26\lib\net45\Geocentrale.DataAdaptors.Geometry.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.OgcAdaptor, Version=1.7.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.OgcAdaptor.1.7.45\lib\net45\Geocentrale.DataAdaptors.OgcAdaptor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.PostgreSqlAdaptor, Version=1.7.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.PostgreSqlAdaptor.1.7.45\lib\net45\Geocentrale.DataAdaptors.PostgreSqlAdaptor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.Resolver, Version=1.7.31.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.Resolver.1.7.31\lib\net45\Geocentrale.DataAdaptors.Resolver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.SqlServerAdaptor, Version=1.6.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.SqlServerAdaptor.1.6.6\lib\net45\Geocentrale.DataAdaptors.SqlServerAdaptor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataAdaptors.SqlServerAdaptor.Geo, Version=1.6.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.SqlServerAdaptor.Geo.1.6.6\lib\net45\Geocentrale.DataAdaptors.SqlServerAdaptor.Geo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.DataOperators, Version=1.7.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataOperators.1.7.26\lib\net45\Geocentrale.DataOperators.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Dispatcher, Version=1.7.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Dispatcher.1.7.26\lib\net45\Geocentrale.Dispatcher.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ErrorHandling, Version=0.2.55.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ErrorHandling.ResourceErrorResourceProvider.0.2.55\lib\net45\Geocentrale.ErrorHandling.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.ErrorHandling.ResourceErrorResourceProvider, Version=0.2.55.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.ErrorHandling.ResourceErrorResourceProvider.0.2.55\lib\net45\Geocentrale.ErrorHandling.ResourceErrorResourceProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Filter, Version=2.0.36.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Filter.2.0.36\lib\net45\Geocentrale.Filter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.GAValue, Version=0.1.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.GAValue.0.1.8\lib\net45\Geocentrale.GAValue.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.MapEngine, Version=1.7.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.MapEngine.1.7.17\lib\net45\Geocentrale.MapEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Resource.Provider, Version=0.1.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Resource.Provider.0.1.15\lib\net45\Geocentrale.Resource.Provider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.TestUtils, Version=0.1.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.TestUtils.0.1.17\lib\net45\Geocentrale.TestUtils.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Validation.Contracts, Version=0.2.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Validation.Contracts.0.2.15\lib\net45\Geocentrale.Validation.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geocentrale.Validation.Extensions, Version=0.2.15.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.Validation.Extensions.0.2.15\lib\net45\Geocentrale.Validation.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GhostscriptSharp, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GhostScriptSharp.1.3.1.4\lib\net40\GhostscriptSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.6.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.6\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Jint, Version=2.7.1.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jint.2.8\lib\portable-net40+sl50+win+WindowsPhoneApp81+wp80\Jint.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mapscript_csharp, Version=1.0.5980.33915, Culture=neutral, PublicKeyToken=80087771edd02926, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.1.10.7\lib\net45\mapscript_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Npgsql, Version=3.1.8.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Npgsql.3.1.8\lib\net451\Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ogr_csharp, Version=1.0.5980.33659, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.1.10.7\lib\net45\ogr_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="osr_csharp, Version=1.0.5980.33659, Culture=neutral, PublicKeyToken=db5a52b08dc5b321, processorArchitecture=MSIL">
+      <HintPath>..\packages\geocentrale-GDAL.1.10.7\lib\net45\osr_csharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Entity">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.Reporting, Version=10.2.16.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telerik.Reporting.10.2.16.1026\lib\Net45\Telerik.Reporting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.Reporting.OpenXmlRendering, Version=10.2.16.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telerik.Reporting.10.2.16.1026\lib\Net45\Telerik.Reporting.OpenXmlRendering.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Telerik.Reporting.XpsRendering, Version=10.2.16.1025, Culture=neutral, PublicKeyToken=a9d7983dfcc261be, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telerik.Reporting.10.2.16.1026\lib\Net45\Telerik.Reporting.XpsRendering.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UAParser, Version=2.1.0.0, Culture=neutral, PublicKeyToken=f7377bf021646069, processorArchitecture=MSIL">
+      <HintPath>..\packages\UAParser.2.1.0.0\lib\net40-Client\UAParser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Config\CatalogGeoservices.cs" />
+    <Compile Include="Controllers\CapabilityController.cs" />
+    <Compile Include="Controllers\CheckController.cs" />
+    <Compile Include="Controllers\ExtractController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Controllers\GetEgridController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\TerravisController.cs" />
+    <Compile Include="Controllers\VersionController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\DataAdaptor.cs" />
+    <Compile Include="Helper\Export.cs" />
+    <Compile Include="Helper\Report.cs" />
+    <Compile Include="Helper\Response.cs" />
+    <Compile Include="Helper\Xml.cs" />
+    <Compile Include="SettingsReader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\dev.geocentrale.com.pubxml" />
+    <None Include="Properties\PublishProfiles\oereb-ur-proc.dev.geocentrale.com.pubxml" />
+    <None Include="Resources\Resources.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Checkfiles\" />
+    <Folder Include="Content\" />
+    <Folder Include="Image\" />
+    <Folder Include="License\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Geocentrale.Apps.Db.Law\Geocentrale.Apps.Db.Law.csproj">
+      <Project>{1164a5dc-d388-4cf8-a99a-31195f36d889}</Project>
+      <Name>Geocentrale.Apps.Db.Law</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Geocentrale.Apps.Db.LexfindCache\Geocentrale.Apps.Db.LexfindCache.csproj">
+      <Project>{43e718e2-f6b0-443d-8875-116e34d06d34}</Project>
+      <Name>Geocentrale.Apps.Db.LexfindCache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Geocentrale.Apps.Db.RuleEngine\Geocentrale.Apps.Db.RuleEngine.csproj">
+      <Project>{b2726d24-5e1b-4f3f-a60e-2669a9487e6c}</Project>
+      <Name>Geocentrale.Apps.Db.RuleEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Geocentrale.Apps.Server.Adapters\Geocentrale.Apps.Server.Adapters.csproj">
+      <Project>{45d90004-ff1a-4f72-849c-148720f1c51f}</Project>
+      <Name>Geocentrale.Apps.Server.Adapters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Geocentrale.Apps.Server\Geocentrale.Apps.Server.csproj">
+      <Project>{e56e290a-3401-4bcc-9970-66917fbb7e5a}</Project>
+      <Name>Geocentrale.Apps.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Oereb.Report\Oereb.Report.csproj">
+      <Project>{5e406ee0-d1d1-4b18-bf01-599c0032cc52}</Project>
+      <Name>Oereb.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Oereb.Service.DataContracts\Oereb.Service.DataContracts.csproj">
+      <Project>{fab01dc5-36f6-44c8-9999-c7767a313b20}</Project>
+      <Name>Oereb.Service.DataContracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>53430</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/Oereb.Service</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.2.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.2.1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets'))" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "ls '$(SolutionDir)\packages\GhostScriptSharp.*\Tools\gsdll64.dll' | Sort -Descending | Select -First 1 | cp -Destination '$(TargetDir)'; exit 0"</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

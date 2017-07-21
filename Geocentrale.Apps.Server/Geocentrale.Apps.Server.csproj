@@ -126,8 +126,8 @@
       <HintPath>..\packages\Geocentrale.DataAdaptors.1.7.26\lib\net45\Geocentrale.DataAdaptors.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Geocentrale.DataAdaptors.ArcgisServerRestAdaptor, Version=1.7.42.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Geocentrale.DataAdaptors.ArcgisServerRestAdaptor.1.7.42\lib\net45\Geocentrale.DataAdaptors.ArcgisServerRestAdaptor.dll</HintPath>
+    <Reference Include="Geocentrale.DataAdaptors.ArcgisServerRestAdaptor, Version=1.7.46.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geocentrale.DataAdaptors.ArcgisServerRestAdaptor.1.7.46\lib\net45\Geocentrale.DataAdaptors.ArcgisServerRestAdaptor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Geocentrale.DataAdaptors.Common, Version=1.7.26.0, Culture=neutral, processorArchitecture=MSIL">
@@ -358,40 +358,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Global.asax" />
-    <Content Include="Image\LogoOereb.png" />
-    <Content Include="Image\LogoOerebOriginal.png" />
-    <Content Include="Image\LogoSwissNeu.png" />
-    <Content Include="Image\formatPDF.png" />
-    <Content Include="Image\LogoSwiss.png" />
-    <Content Include="Image\NorthArrow.png" />
-    <Content Include="Image\oereb\artikel.png" />
-    <Content Include="Image\oereb\Baulinien Eisenbahnanlagen.png" />
-    <Content Include="Image\oereb\Baulinien Flughafenanlagen.png" />
-    <Content Include="Image\oereb\Baulinien Nationalstrassen.png" />
-    <Content Include="Image\oereb\Belastete Standorte Militär.png" />
-    <Content Include="Image\oereb\Belastete Standorte zivile Flugplätze.png" />
-    <Content Include="Image\oereb\Belastete Standorte Öffentlicher Verkehr.png" />
-    <Content Include="Image\oereb\Belastete Standorte.png" />
-    <Content Include="Image\oereb\Gestaltungsplan %28Sondernutzungsplan%29.png" />
-    <Content Include="Image\oereb\empty.png" />
-    <Content Include="Image\oereb\Grundwasserschutzareale.png" />
-    <Content Include="Image\oereb\Grundwasserschutzzonen.png" />
-    <Content Include="Image\oereb\highlight.png" />
-    <Content Include="Image\oereb\law.png" />
-    <Content Include="Image\oereb\Lärmempfindlichkeitsstufen.png" />
-    <Content Include="Image\oereb\Nutzungsplanung kantonal.png" />
-    <Content Include="Image\oereb\Nutzungsplanung kommunal.png" />
-    <Content Include="Image\oereb\Nutzungsplanung.png" />
-    <Content Include="Image\oereb\poi.png" />
-    <Content Include="Image\oereb\Projektierungszonen Eisenbahnanlagen.png" />
-    <Content Include="Image\oereb\Projektierungszonen Flughafenanlagen.png" />
-    <Content Include="Image\oereb\Projektierungszonen Nationalstrassen.png" />
-    <Content Include="Image\oereb\Quartierplan %28Sondernutzungsplan%29.png" />
-    <Content Include="Image\oereb\Sicherheitszonenplan Flughafen.png" />
-    <Content Include="Image\oereb\Waldabstandslinien.png" />
-    <Content Include="Image\oereb\Waldgrenzen.png" />
-    <Content Include="Image\report_NorthArrow.png" />
-    <Content Include="Image\report_Scalebar.png" />
     <Content Include="Merger.svc" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="Web.config">
@@ -403,12 +369,10 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Catalog\ApplicationAdditionalLayer.cs" />
-    <Compile Include="Catalog\ApplicationSetting.cs" />
     <Compile Include="Catalog\ApplicationTopic.cs" />
     <Compile Include="Catalog\Catalog.cs" />
     <Compile Include="Catalog\Application.cs" />
@@ -416,6 +380,7 @@
     <Compile Include="Catalog\Resource.cs" />
     <Compile Include="Common\Geometry.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Export\ImageSet.cs" />
     <Compile Include="Export\OerebResult.cs" />
     <Compile Include="Export\Xml\Converter.cs" />
     <Compile Include="Global.asax.cs">
@@ -427,6 +392,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helper\EnumResolve.cs" />
+    <Compile Include="Helper\Metadata.cs" />
+    <Compile Include="Helper\CheckProcessing.cs" />
+    <Compile Include="Helper\TasksExpandoObject.cs" />
     <Compile Include="Helper\Xml.cs" />
     <Compile Include="IMergerService.cs" />
     <Compile Include="MergerRequest.cs" />
@@ -453,6 +421,14 @@
       <Project>{45d90004-ff1a-4f72-849c-148720f1c51f}</Project>
       <Name>Geocentrale.Apps.Server.Adapters</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Oereb.Report\Oereb.Report.csproj">
+      <Project>{5e406ee0-d1d1-4b18-bf01-599c0032cc52}</Project>
+      <Name>Oereb.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Oereb.Service.DataContracts\Oereb.Service.DataContracts.csproj">
+      <Project>{fab01dc5-36f6-44c8-9999-c7767a313b20}</Project>
+      <Name>Oereb.Service.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -460,15 +436,20 @@
   <ItemGroup>
     <Folder Include="Config\" />
     <Folder Include="Content\" />
-    <Folder Include="Image\canton\" />
-    <Folder Include="Image\community\" />
-    <Folder Include="Image\icon\" />
+    <Folder Include="Image\" />
     <Folder Include="License\" />
-    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\geoc-geoapps1-develope.pubxml" />
+    <None Include="Properties\PublishProfiles\geoc-geoapps1_TestSystem.pubxml" />
+    <None Include="Properties\PublishProfiles\geoc-geoapps2-develope.pubxml" />
+    <None Include="Properties\PublishProfiles\geoc-geoapps2-prod.pubxml" />
+    <None Include="Properties\PublishProfiles\oereb dev ur %28apps3.dev.geocentrale.com%29.pubxml" />
     <None Include="Resources\Resources.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Web.TestSystem.config">
+      <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <PropertyGroup>

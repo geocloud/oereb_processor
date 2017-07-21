@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using Geocentrale.Apps.DataContracts;
@@ -57,146 +58,158 @@ namespace Geocentrale.Apps.Server.Modules
         {
             log.Debug("****** Process oerebModule is starting");
 
+            //this part is deprecated, the inputObject has to be created outside
+
             _mergerRequest = mergerRequest;
 
-            if (mergerRequest.Selections.Count != 1)
-            {
-                return GetErrorReport(string.Format("no or more than one selections, {0}", DumpObject(mergerRequest)));
-            }
-            var selection = mergerRequest.Selections.First();
-
-            Guid selectionGuid = selection.classId; //todo rename classId in mergerRequest
-            double selectionBuffer = selection.buffer;
-
-            var inputDataSet = Catalog.Catalog.GetDataSet(selectionGuid);
-
-            if (inputDataSet == null)
-            {
-                return GetErrorReport(string.Format("input selection class not found or no geoDataSet, {0}", DumpObject(mergerRequest)));
-            }
-
-            if (selection.gaFilter == null || selection.gaFilter.Expression.ValueExpressions.Count != 1 || selection.gaFilter.Expression.ValueExpressions.First().Values.Count == 0)
-            {
-                return GetErrorReport(string.Format("input selection, filter is not valid, {0}", DumpObject(mergerRequest)));
-            }
-
-            GAObject inputObject;
-
-            if (selection.gaFilter.Expression.ValueExpressions.First().AttributeOperator ==  AttributeOperator.Intersect)
-            {
-                var valueExpression = selection.gaFilter.Expression.ValueExpressions.First();
-                var geometry = valueExpression.Values.First().Value.ToString().ToLower();
-
-                //geometry-selection, create a virtual object, which is not in the datasource
-
-                if (!geometry.Contains("polygon")) //TODO && !IsValid(selectionGeometry)
-                {
-                    return GetErrorReport(string.Format("input selection, geometry is not a polygon or invalid, {0}", DumpObject(mergerRequest)));
-                }
-
-                var geoClass = inputDataSet.GaClass as GAGeoClass;
-                inputObject = new GAObject(geoClass);
-                inputObject.DsGuid = inputDataSet.Guid;
-                inputObject[geoClass.GeometryFieldName] = (string)geometry;
-                inputObject[geoClass.ObjectIdFieldName] = (Int64)0;
-
-                mergerRequest.QueryWithPseudoObject = true; //important
-            }
-            else
-            {
-                //filterselection, TODO has to be more generic
-
-                //TODO are this two rows necessary for the client
-                //var value = int.Parse(selection.gaFilter.Expression.ValueExpressions.First().Values.First().ToString());
-                //selection.gaFilter.Expression.ValueExpressions.First().Values = new List<object> {value};
-
-                inputObject = Resolver.ResolveGAObjects(new List<ResolverSkeleton> { new ResolverSkeleton(inputDataSet, selection.gaFilter) }).FirstOrDefault();
-            }
+            var inputObject = mergerRequest.InputObject;
+            var involvedObjectsBypassed = mergerRequest.InvolvedObjects;
 
             if (inputObject == null)
-            {
-                return GetErrorReport("no valid input object");
-            }
-
-            log.Debug("****** inputobject is ready");
-
-            var inputObjects = new List<GAObject> {inputObject}; // TODO at this time only one inputObject because the performance is not scalable
-            var allDataSets = Catalog.Catalog.GetAllDataSets(_mergerRequest.AppId);
-            var ruleEvaluatorResults = new List<RuleEvaluatorResult>();
-
-            foreach (var inputItem in inputObjects)
-            {
-                var filteredDatasets = allDataSets.Where(x => !x.Guid.Equals(selectionGuid) && Catalog.Catalog.IsLayerDataSet(x.Guid)); //exclude input dataset (intersection to itself is not wise) and baselayers
-                var objectSkeletons = new List<ResolverSkeleton>();
-
-                //******************************************************************************************************************
-                //get involved objects (preselection of objects), layerpuncher
-
-                log.Debug("*** layerpuncher start");
-
-                foreach (var dataset in filteredDatasets)
+            {                
+                if (mergerRequest.Selections.Count != 1)
                 {
-                    var gaGeoClass = dataset.GaClass as GAGeoClass;
+                    return GetErrorReport($"no or more than one selections, {DumpObject(mergerRequest)}");
+                }
+                var selection = mergerRequest.Selections.First();
 
-                    if (gaGeoClass == null)
+                Guid selectionGuid = selection.classId; //todo rename classId in mergerRequest
+                double selectionBuffer = selection.buffer;
+
+                var inputDataSet = Catalog.Catalog.GetDataSet(selectionGuid);
+
+                if (inputDataSet == null)
+                {
+                    return GetErrorReport($"input selection class not found or no geoDataSet, {DumpObject(mergerRequest)}");
+                }
+
+                if (selection.gaFilter == null || selection.gaFilter.Expression.ValueExpressions.Count != 1 || selection.gaFilter.Expression.ValueExpressions.First().Values.Count == 0)
+                {
+                    return GetErrorReport($"input selection, filter is not valid, {DumpObject(mergerRequest)}");
+                }
+
+                if (selection.gaFilter.Expression.ValueExpressions.First().AttributeOperator ==  AttributeOperator.Intersect)
+                {
+                    var valueExpression = selection.gaFilter.Expression.ValueExpressions.First();
+                    var geometry = valueExpression.Values.First().Value.ToString().ToLower();
+
+                    //geometry-selection, create a virtual object, which is not in the datasource
+
+                    if (!geometry.Contains("polygon")) //TODO && !IsValid(selectionGeometry)
                     {
-                        log.Warn(string.Format("layerpuncher, only geodatasets allowed, {0}", dataset.Guid));
-                        continue;
+                        return GetErrorReport($"input selection, geometry is not a polygon or invalid, {DumpObject(mergerRequest)}");
                     }
 
-                    var geometryFieldInput = (inputItem.GAClass as GAGeoClass).GeometryFieldName;
-                    var geometryValueInput = inputObject[geometryFieldInput];
+                    var geoClass = inputDataSet.GaClass as GAGeoClass;
+                    inputObject = new GAObject(geoClass);
+                    inputObject.DsGuid = inputDataSet.Guid;
+                    inputObject[geoClass.GeometryFieldName] = (string)geometry;
+                    inputObject[geoClass.ObjectIdFieldName] = (Int64)0;
 
-                    //TODO geometryValueInput = Geometry.Common.GetExtent(geometryValueInput); //simply for faster queries
-                    //TODO geometryValueInput = Geometry.Common.GetBuffer(geometryValueInput, selectionBuffer);
-
-                    var filter = new GAFilter();
-                    filter.Expression.ValueExpressions.Add(new GAValueExpression(BooleanOperator.And, gaGeoClass.GeometryFieldName, AttributeOperator.Intersect, geometryValueInput, typeof(string)));
-
-                    objectSkeletons.Add(new ResolverSkeleton(dataset, filter));
+                    mergerRequest.QueryWithPseudoObject = true; //important
                 }
-
-                log.Debug("****** resolve objects start");
-
-                var involvedObjects = new List<GAObject>();
-
-                log.Debug(JsonConvert.SerializeObject(objectSkeletons));
-
-                try
+                else
                 {
-                    involvedObjects = Resolver.ResolveGAObjects(objectSkeletons);
+                    //filterselection, TODO has to be more generic
+
+                    //TODO are this two rows necessary for the client
+                    //var value = int.Parse(selection.gaFilter.Expression.ValueExpressions.First().Values.First().ToString());
+                    //selection.gaFilter.Expression.ValueExpressions.First().Values = new List<object> {value};
+
+                    inputObject = Resolver.ResolveGAObjects(new List<ResolverSkeleton> { new ResolverSkeleton(inputDataSet, selection.gaFilter) }).FirstOrDefault();
                 }
-                catch (Exception ex)
+
+                if (inputObject == null)
                 {
-                    log.Error("error resolving: {0}", ex);
+                    return GetErrorReport("no valid input object");
                 }
 
-                log.Debug("****** resolve objects end");
-
-                if (!involvedObjects.Any())
-                {
-                    return GetErrorReport(string.Format("no involdved objects found, {0}", DumpObject(mergerRequest)));
-                }
-
-                involvedObjects.Add(inputObject); //add inputObject again for the rule engine
-
-                //var involvedObjectsSER = JsonConvert.SerializeObject(involvedObjects.First(), Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All });
-                //log.Debug(involvedObjectsSER);
-
-                //******************************************************************************************************************
-                //rule evaluation
-
-                log.Debug(string.Format("****** rule elevation start with <{0}> with involved objects", involvedObjects.Count));
-
-                var ruleEvaluator = new RuleEvaluator();
-                var ruleEvaluatorResult = ruleEvaluator.TestAllRules(involvedObjects, selection.buffer);
-
-                ruleEvaluatorResults.AddRange(ruleEvaluatorResult);
-
-                log.Debug(string.Format("count of elevated objects {0}", ruleEvaluatorResult.Count));
-                log.Debug("****** rule elevation end");
+                log.Debug("****** inputobject is ready");
             }
 
+            //******************************************************************************************************************
+            //get involved objects (preselection of objects), layerpuncher
+
+            var allDataSets = Catalog.Catalog.GetAllDataSets(_mergerRequest.AppId);
+            var ruleEvaluatorResults = new List<RuleEvaluatorResult>();
+            var inputObjectGuidDs = Catalog.Catalog.GetDataSetFromClass(inputObject.GAClass.Guid);
+
+            var filteredDatasets = allDataSets.Where(x => !x.Guid.Equals(inputObjectGuidDs) && Catalog.Catalog.IsLayerDataSet(x.Guid)); //exclude input dataset (intersection to itself is not wise) and baselayers
+            var objectSkeletons = new List<ResolverSkeleton>();
+
+            log.Debug("*** layerpuncher start");
+
+            foreach (var dataset in filteredDatasets)
+            {
+                var gaGeoClass = dataset.GaClass as GAGeoClass;
+
+                if (gaGeoClass == null)
+                {
+                    log.Warn($"layerpuncher, only geodatasets allowed, {dataset.Guid}");
+                    continue;
+                }
+
+                var geometryFieldInput = (inputObject.GAClass as GAGeoClass).GeometryFieldName;
+                //var geometryValueInput = inputObject[geometryFieldInput];
+                var geometryValueInput = Common.Geometry.BufferWkt(inputObject[geometryFieldInput], Convert.ToDouble(ConfigurationManager.AppSettings["distanceAbstractionRule"]));
+
+                //TODO geometryValueInput = Geometry.Common.GetExtent(geometryValueInput); //simply for faster queries
+                //TODO geometryValueInput = Geometry.Common.GetBuffer(geometryValueInput, selectionBuffer);
+
+                var filter = new GAFilter();
+                filter.Expression.ValueExpressions.Add(new GAValueExpression(BooleanOperator.And, gaGeoClass.GeometryFieldName, AttributeOperator.Intersect, geometryValueInput, typeof(string)));
+
+                objectSkeletons.Add(new ResolverSkeleton(dataset, filter));
+            }
+
+            log.Debug("****** resolve objects start");
+
+            var involvedObjects = involvedObjectsBypassed ?? new List<GAObject>();
+
+            //log.Debug(JsonConvert.SerializeObject(objectSkeletons));
+
+            try
+            {
+                involvedObjects.AddRange(Resolver.ResolveGAObjects(objectSkeletons));
+            }
+            catch (Exception ex)
+            {
+                log.Error("error resolving: {0}", ex);
+            }
+
+            log.Debug("****** resolve objects end");
+
+            if (!involvedObjects.Any())
+            {
+                return GetErrorReport(string.Format("no involdved objects found, {0}", DumpObject(mergerRequest)));
+            }
+
+            involvedObjects.Add(inputObject); //add inputObject again for the rule engine
+
+            //var typeofObjects = involvedObjects.Select(x => $"{x.GAClass.Guid}: {(x.GAClass as GAGeoClass).Layername}").Distinct().ToList();
+
+            //var involvedObjectsSER = JsonConvert.SerializeObject(involvedObjects.First(), Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All });
+            //log.Debug(involvedObjectsSER);
+
+            //******************************************************************************************************************
+            //rule evaluation
+
+            log.Debug(string.Format("****** rule elevation start with <{0}> with involved objects", involvedObjects.Count));
+
+            var ruleEvaluator = new RuleEvaluator();
+            var ruleEvaluatorResult = ruleEvaluator.TestAllRules(involvedObjects, mergerRequest.Selections.First().buffer);
+
+            ruleEvaluatorResults.AddRange(ruleEvaluatorResult);
+
+            log.Debug(string.Format("count of elevated objects {0}", ruleEvaluatorResult.Count));
+            log.Debug("****** rule elevation end");
+
+            log.Debug("****** create report object start");
+
+            //todo implement good readable log entry for the report (helps for debugging a wrong result)
+
+            /*
+             
             if (log.IsDebugEnabled)
             {
                 log.Debug(DumpObject(ruleEvaluatorResults));
@@ -227,10 +240,8 @@ namespace Geocentrale.Apps.Server.Modules
                 log.Debug(dump1);
                 log.Debug(dump2);                
             }
-
-            log.Debug("****** create report object start");
-
-            //generate the report body, 100% identical to last version
+             
+            */
 
             var app = Global.Applications.FirstOrDefault(x => x.Guid == mergerRequest.AppId);
             var topicsExcluded = new List<ApplicationTopic>();
@@ -251,52 +262,54 @@ namespace Geocentrale.Apps.Server.Modules
 
             List<GATreeNode<GAObject>> res = new List<GATreeNode<GAObject>>();
 
-            foreach (var inObject in inputObjects)
+            GATreeNode<GAObject> inObjectNode = new GATreeNode<GAObject>(inputObject); // = grundstück
+            Guid inObjectClassId = inputObject.GAClass.Guid;
+            var evalResultsForThisInObject = ruleEvaluatorResults.Where(x => x.InvolvedObjects.Any(y => y.GAClass.Guid == inObjectClassId && inputObject[inputObject.GAClass.ObjectIdFieldName] == y[y.GAClass.ObjectIdFieldName])).ToList();
+            foreach (GAObject oerebKThema in GetOerebKThemen())
             {
-                GATreeNode<GAObject> inObjectNode = new GATreeNode<GAObject>(inObject); // = grundstück
-                Guid inObjectClassId = inObject.GAClass.Guid;
-                var evalResultsForThisInObject = ruleEvaluatorResults.Where(x => x.InvolvedObjects.Any(y => y.GAClass.Guid == inObjectClassId && inObject[inObject.GAClass.ObjectIdFieldName] == y[y.GAClass.ObjectIdFieldName])).ToList();
-                foreach (GAObject oerebKThema in GetOerebKThemen())
+                //if (!app.Topics.Select(x => x.Id).ToList().Contains(oerebKThema["Beschreibung"].ToString()))
+                //{
+                //    continue;
+                //}
+
+                if (topicsExcluded.Any(x => x.Id == oerebKThema["Beschreibung"].ToString()))
                 {
-                    if (topicsExcluded.Any(x => x.Id == oerebKThema["Beschreibung"].ToString()))
-                    {
-                        continue;
-                    }
-
-                    GATreeNode<GAObject> oerebKThemaNode = new GATreeNode<GAObject>(oerebKThema); // = oerebk thema
-                    int oerebKThemaId = oerebKThema["Id"];
-                    var evalResultsForThisThema = evalResultsForThisInObject.Where(x => x.AssociatedObjects.Select(y => y["OerebKThema.Id"]).Contains(oerebKThemaId));
-                    foreach (var evalResult in evalResultsForThisThema)
-                    {
-                        foreach (var associatedObject in evalResult.AssociatedObjects)
-                        {
-                            GATreeNode<GAObject> associatedObjectNode = new GATreeNode<GAObject>(associatedObject); // = oereb def
-                            foreach (var involvedObject in evalResult.InvolvedObjects.Where(x => x.GAClass.Guid != inObjectClassId))
-                            {
-                                var involvedProcessedObject = Geometry.FeatureIntersectCalculation(inObject, involvedObject).Value as GAObject;
-                                InsertRuleExpressionAttributes(evalResult, involvedProcessedObject); // add rule expression attribute for admin mode
-                                GATreeNode<GAObject> involvedObjectNode = new GATreeNode<GAObject>(involvedProcessedObject); // = schnittgeometrien
-                                associatedObjectNode.Children.Add(involvedObjectNode);
-                                var relatedObjects = GetRelatedObjects(involvedObject);
-                                if (relatedObjects.Any())
-                                {
-                                    associatedObjectNode.Children.AddRange(relatedObjects.Select(relatedObject => new GATreeNode<GAObject>(relatedObject)));
-                                }
-                            }
-                            List<GAObject> rechtsnormen = GetRechtsnormenForOerebDef(associatedObject);
-                            rechtsnormen.ForEach(x => associatedObjectNode.AddChild(x)); // = rechtsnormen / artikel
-                            UpdateOerebKThemaStatus(oerebKThemaNode.Value);
-                            oerebKThemaNode.Children.Add(associatedObjectNode);
-                        }
-                    }
-                    inObjectNode.Children.Add(oerebKThemaNode);
+                    continue;
                 }
-                res.Add(inObjectNode);
+
+                GATreeNode<GAObject> oerebKThemaNode = new GATreeNode<GAObject>(oerebKThema); // = oerebk thema
+                int oerebKThemaId = oerebKThema["Id"];
+                var evalResultsForThisThema = evalResultsForThisInObject.Where(x => x.AssociatedObjects.Select(y => y["OerebKThema.Id"]).Contains(oerebKThemaId));
+                foreach (var evalResult in evalResultsForThisThema)
+                {
+                    foreach (var associatedObject in evalResult.AssociatedObjects)
+                    {
+                        GATreeNode<GAObject> associatedObjectNode = new GATreeNode<GAObject>(associatedObject); // = oereb def
+                        foreach (var involvedObject in evalResult.InvolvedObjects.Where(x => x.GAClass.Guid != inObjectClassId))
+                        {
+                            var involvedProcessedObject = Geometry.FeatureIntersectCalculation(inputObject, involvedObject).Value as GAObject;
+                            InsertRuleExpressionAttributes(evalResult, involvedProcessedObject); // add rule expression attribute for admin mode
+                            GATreeNode<GAObject> involvedObjectNode = new GATreeNode<GAObject>(involvedProcessedObject); // = schnittgeometrien
+                            associatedObjectNode.Children.Add(involvedObjectNode);
+                            var relatedObjects = GetRelatedObjects(involvedObject);
+                            if (relatedObjects.Any())
+                            {
+                                associatedObjectNode.Children.AddRange(relatedObjects.Select(relatedObject => new GATreeNode<GAObject>(relatedObject)));
+                            }
+                        }
+                        List<GAObject> rechtsnormen = GetRechtsnormenForOerebDef(associatedObject);
+                        rechtsnormen.ForEach(x => associatedObjectNode.AddChild(x)); // = rechtsnormen / artikel
+                        UpdateOerebKThemaStatus(oerebKThemaNode.Value);
+                        oerebKThemaNode.Children.Add(associatedObjectNode);
+                    }
+                }
+                inObjectNode.Children.Add(oerebKThemaNode);
             }
+            res.Add(inObjectNode);
 
-            var gAReport = new GAReport("OEREBK Auswertung", _reportDefinition, res);
+            var gAReport = new GAReport($"OEREBK Auswertung;{involvedObjects.Count};{ruleEvaluatorResult.Count}", _reportDefinition, res);
 
-            log.Debug(DumpObject(gAReport));
+            //log.Debug(DumpObject(gAReport));
  
             log.Debug("****** create report object end");
 

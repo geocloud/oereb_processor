@@ -92,7 +92,6 @@
   <ItemGroup>
     <Compile Include="ScalarClass.cs" />
     <Compile Include="IGAAdapter.cs" />
-    <Compile Include="Law3\Geobasisdaten\GeobasisdatenAdapter.cs" />
     <Compile Include="Law3\Law3Adapter.cs" />
     <Compile Include="LexFind\Gemeinde.cs" />
     <Compile Include="LexFind\GemeindeResolver.cs" />
@@ -107,7 +106,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

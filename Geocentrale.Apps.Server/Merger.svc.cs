@@ -130,14 +130,14 @@ namespace Geocentrale.Apps.Server
 					return GetStreamFromString(JsonConvert.SerializeObject(gAReport), "application/json");
 				}
 
-				Global.ProcessedObjects.Add(processHash, new ProcessedObject {mergerRequest = mergerRequest, gAReport = gAReport});
+				Global.ProcessedObjects.Add(processHash, new ProcessedObject {MergerRequest = mergerRequest, GaReport = gAReport});
 			}
 			else
 			{
                 log.DebugFormat("take Catalog from cache, processHash {0}", processHash);
 
-				mergerRequest = Global.ProcessedObjects[processHash].mergerRequest;
-				gAReport = Global.ProcessedObjects[processHash].gAReport;
+				mergerRequest = Global.ProcessedObjects[processHash].MergerRequest;
+				gAReport = Global.ProcessedObjects[processHash].GaReport;
 			}
 
             log.Debug("****** export is starting");
@@ -164,8 +164,8 @@ namespace Geocentrale.Apps.Server
                 return Error($"invalid output format {format}");
             }
 
-			MergerRequest mergerRequest = CloneObject(Global.ProcessedObjects[processHash].mergerRequest) ;
-			GAReport gAReport = Global.ProcessedObjects[processHash].gAReport;
+			MergerRequest mergerRequest = CloneObject(Global.ProcessedObjects[processHash].MergerRequest) ;
+			GAReport gAReport = Global.ProcessedObjects[processHash].GaReport;
 
             if (format == "pdfCompl")
             {
@@ -541,7 +541,7 @@ namespace Geocentrale.Apps.Server
                         var resultXml = exportModule.ToXml(mergerRequest, gAReport);
 
                         currentWebContext.OutgoingResponse.ContentType = "text/xml";
-                        content = Encoding.Unicode.GetBytes(resultXml); //UTF16
+                        content = Encoding.UTF8.GetBytes(resultXml);
                         currentWebContext.OutgoingResponse.ContentLength = content.Length;
                         currentWebContext.OutgoingResponse.Headers.Add("Content-Length", content.Length.ToString());
                         return new MemoryStream(content);

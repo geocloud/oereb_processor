@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.Serialization;
+using Geocentrale.Apps.DataContracts;
 using Oereb.Service.DataContracts;
 
 namespace Geocentrale.Apps.Server.Helper
@@ -20,21 +23,37 @@ namespace Geocentrale.Apps.Server.Helper
                 throw new Exception("serialize value is null");
             }
 
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Encoding = new UnicodeEncoding(false, false); // no BOM in a .NET string
-            settings.Indent = false;
-            settings.OmitXmlDeclaration = false;
-
-            using (StringWriter textWriter = new StringWriter())
+            var serializer = new XmlSerializer(typeof(T));
+            using (var memStm = new MemoryStream())
+            using (var xw = XmlWriter.Create(memStm))
             {
-                using (XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings))
+                serializer.Serialize(xw, value);
+                var buffer = memStm.ToArray();
+                var xmlContent = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+
+                if (xmlContent[0] == 65279)
                 {
-                    serializer.Serialize(xmlWriter, value);
+                    xmlContent = xmlContent.Substring(1);
                 }
-                return textWriter.ToString();
+
+                return xmlContent;
             }
+
+            //XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+            //XmlWriterSettings settings = new XmlWriterSettings();
+            //settings.Encoding = new UTF8Encoding(); //new UnicodeEncoding(false, false); // no BOM in a .NET string
+            //settings.Indent = false;
+            //settings.OmitXmlDeclaration = false;
+
+            //using (StringWriter textWriter = new StringWriter())
+            //{
+            //    using (XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings))
+            //    {
+            //        serializer.Serialize(xmlWriter, value);
+            //    }
+            //    return textWriter.ToString();
+            //}
         }
 
         public static T DeserializeFromXmlString(string xml)
@@ -84,6 +103,86 @@ namespace Geocentrale.Apps.Server.Helper
             catch (Exception ex)
             {
                 throw new Exception($"could not deserialize from file {filename}", ex);
+            }
+        }
+
+        public static GAStatus Validate(string xmlPath, string pathSchema)
+        {
+            XDocument document = XDocument.Load(xmlPath);
+
+            if (!string.IsNullOrEmpty(pathSchema))
+            {
+                SetAbsoluteSchemaPath(document, pathSchema);
+            }
+
+            document.Save(xmlPath.Replace(".xml", "_schemapath.xml"));
+
+            document = XDocument.Load(xmlPath.Replace(".xml", "_schemapath.xml"));
+
+            var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema };
+            //settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+            //settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+            //settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+            //settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessIdentityConstraints;
+
+            settings.DtdProcessing = DtdProcessing.Parse;
+
+            var status = new GAStatus(true);
+
+            settings.ValidationEventHandler += (o, args) => status.Add(ValidationCallBack(o, args));
+
+            try
+            {
+                var reader = XmlReader.Create(document.CreateReader(), settings);
+                while (reader.Read())
+                {
+                    // nothing to do here
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = "error during parse " + ex.Message;
+                status.Add(new GAStatus(false, msg, ex));
+            }
+
+            return status;
+        }
+
+        private static GAStatus ValidationCallBack(object sender, ValidationEventArgs args)
+        {
+            var exception = (args.Exception as XmlSchemaValidationException);
+            var msg = args.Message + "SourceUri: " + args.Exception.SourceUri + " Line:" + args.Exception.LineNumber + " Position:" + args.Exception.LinePosition;
+            var element = exception?.SourceObject as XElement;
+
+            if (element != null)
+            {
+                var si = element.GetSchemaInfo();
+                msg += " Schema: " + si;
+            }
+
+            return new GAStatus(false, msg, args.Exception);
+        }
+
+        private static void SetAbsoluteSchemaPath(XDocument document, string schemaPath)
+        {
+            if (document.Root == null)
+            {
+                return;
+            }
+
+            XNamespace ns = "http://www.w3.org/2001/XMLSchema-instance";
+            var attributeXName = ns + "schemaLocation";
+           
+            var attribute = document.Root.Attribute(attributeXName);
+
+            if (attribute == null)
+            {
+                var xAttribute = new XAttribute(attributeXName, "http://schemas.geo.admin.ch/swisstopo/OeREBK/15/ExtractData " + schemaPath);
+                document.Root.Add(xAttribute);
+            }
+            else
+            {
+                attribute.Value = "http://schemas.geo.admin.ch/swisstopo/OeREBK/15/ExtractData " + schemaPath;
             }
         }
     }

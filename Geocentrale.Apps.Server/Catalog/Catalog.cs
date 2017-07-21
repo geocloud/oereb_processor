@@ -178,21 +178,6 @@ namespace Geocentrale.Apps.Server.Catalog
                 application.Topics.Add(applicationTopic);
 		    }
 
-            log.Debug("parse app settings");
-
-            var settings = xElement.XPathSelectElements("/descendant::AppSetting");
-
-            foreach (var setting in settings)
-            {
-                var applicationSetting = new ApplicationSetting
-                {
-                    Name = setting.Attribute("Name").Value,
-                    Value = setting.Value
-                };
-
-                application.Settings.Add(applicationSetting);
-            }
-
 			var apps = xElement.XPathSelectElements("/App");
 
 			foreach (var app in apps)

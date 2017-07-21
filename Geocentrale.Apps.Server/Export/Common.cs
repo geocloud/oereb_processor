@@ -78,6 +78,8 @@ namespace Geocentrale.Apps.Server.Export
                 {
                     var legendItem = oerebDataAdaptor.GaGeoClass.Renderer.GetLegendItem(gaObject);
 
+                    //todo if the value in the object does not exist in the metadata (inconsistent):  legendItem.Value is null => exception
+
                     if (!String.IsNullOrEmpty(legendItem.Key) && !String.IsNullOrEmpty(legendItem.Value.Label))
                     {
                         var index = legendItem.Value.Label.IndexOf("#"); //legend separator in oereb projects, bad hack from the prototyp

@@ -13,7 +13,6 @@ using System.Xml;
 using System.Xml.Linq;
 using Geocentrale.Apps.DataContracts;
 using Geocentrale.Apps.DataContracts.Filter;
-using Geocentrale.Apps.Server.Export.Oereb;
 using Geocentrale.Apps.Server.Helper;
 using Geocentrale.Common;
 using Geocentrale.DataAdaptors.ArcgisServerRestAdaptor;
@@ -65,6 +64,8 @@ namespace Geocentrale.Apps.Server.Export.Xml
 
         private byte[] _imageEmptyPngByteArray { get; set; }
 
+        private Dictionary<string,Image> _imageCache{ get; set; }
+
         public Converter(MergerRequest mergerRequest, GAReport gAReport)
         {
             _mergerRequest = mergerRequest;
@@ -78,6 +79,8 @@ namespace Geocentrale.Apps.Server.Export.Xml
 
             _imageEmptyPng = ImageTasks.GetImageFromBase64String(OerebExportModule.EmptyPngBase64);
             _imageEmptyPngByteArray = ImageTasks.ImageToByteArray(_imageEmptyPng, ImageFormat.Png);
+
+            _imageCache = new Dictionary<string, Image>();
         }
 
         public string Process()
@@ -110,7 +113,7 @@ namespace Geocentrale.Apps.Server.Export.Xml
                 //extract-topics
 
                 var sectionCt = parcel.Sections.FirstOrDefault(x => x.Key == OerebResult.SectionType.ConcernedTheme).Value;
-                extractData.ConcernedTheme = sectionCt.Topics.Select(x => 
+                extractData.ConcernedTheme = sectionCt.Topics.OrderBy(x=>x.ConfigTopic.Seq).Select(x => 
                     new Theme()
                     {
                         Code = x.ConfigTopic.NameEnum,
@@ -123,10 +126,10 @@ namespace Geocentrale.Apps.Server.Export.Xml
                 //todo filter topics which not exist in country
                 var test = sectionNot.Topics.Select(x => !canton.TopicsDictionary.ContainsKey(x.Name)).ToList();
 
-                extractData.NotConcernedTheme = sectionNot.Topics.Select(x => new Theme() { Code = x.ConfigTopic.NameEnum, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = x.ConfigTopic.Name } }).ToArray();
+                extractData.NotConcernedTheme = sectionNot.Topics.OrderBy(x => x.ConfigTopic.Seq).Select(x => new Theme() { Code = x.ConfigTopic.NameEnum, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = x.ConfigTopic.Name } }).ToArray();
 
                 var sectionWod = parcel.Sections.FirstOrDefault(x => x.Key == OerebResult.SectionType.ThemeWithoutData).Value;
-                extractData.ThemeWithoutData = sectionWod.Topics.Select(x => new Theme() { Code = x.ConfigTopic.NameEnum, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = x.ConfigTopic.Name } }).ToArray();
+                extractData.ThemeWithoutData = sectionWod.Topics.OrderBy(x => x.ConfigTopic.Seq).Select(x => new Theme() { Code = x.ConfigTopic.NameEnum, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = x.ConfigTopic.Name } }).ToArray();
 
                 //only true is possible per definition
 
@@ -329,114 +332,126 @@ namespace Geocentrale.Apps.Server.Export.Xml
             var restrictionsOnLandownership = new List<RestrictionOnLandownership>();
             var concernedTheme = sections[OerebResult.SectionType.ConcernedTheme];
 
-            foreach (var topic in concernedTheme.Topics)
+            foreach (var topic in concernedTheme.Topics.OrderBy(x=>x.ConfigTopic.Seq))
             {
-                //TODO use information
-                var additionalLayerGeoDatasets = topic.ConfigTopic.AdditionalLayers.Select(x => (IGAGeoDataSet)Catalog.Catalog.GetDataSet(x.Guid));
-                var involvedFeatures = topic.OerebDefs.Select(x => x.Features.First().Fid).ToList();
-
                 foreach (var oerebDef in topic.OerebDefs)
                 {
-                    //ToDo group the oerebDef geometric childs (feature) by gaObject.DsGuid ???
-
-                    var restrictionOnLandownership = new RestrictionOnLandownership();
-
-                    var themeConfig = canton.Topics.First(x => x.Name == topic.Name);
-
-                    restrictionOnLandownership.Theme = new Theme() { Code = themeConfig.NameEnum, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = themeConfig.Name } };
-                    restrictionOnLandownership.SubTheme = topic.Name;
-                    restrictionOnLandownership.Information = new LocalisedMText[] { new LocalisedMText() { Language = LanguageCode.de, LanguageSpecified = true, Text = oerebDef.Information } }; //Aussage
-
-                    var lawStatusCode = EnumResolve.ParseEnum<LawstatusCode>(oerebDef.LawStatus.ToString());
-                    restrictionOnLandownership.Lawstatus = new Lawstatus() { Code = lawStatusCode, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = oerebDef.LawStatus.ToString() } };
-
-                    restrictionOnLandownership.ResponsibleOffice = new Office()
-                    {
-                        Name = new LocalisedText[] {new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = oerebDef.OfficeName} },
-                        OfficeAtWeb = new WebReference() { Value = oerebDef.OfficeAtWeb}
-                    };
-
-                    var feature = oerebDef.Features.First();
-
                     if (oerebDef.Features.Count > 1)
                     {
-                        log.Warn($"oerebdef has more {oerebDef.Features.Count} features, is that possible");   
+                        log.Warn($"oerebdef has more {oerebDef.Features.Count} features, is that possible");
                     }
 
-                    var legendItem = GetLegendFromFeature(feature.Item.Value);  //Common.GetLegendFromFeature(feature.Item.Value);
+                    //ToDo question group the oerebDef geometric childs (feature) by gaObject.DsGuid ???
+                    //special case: only layer with relations has more than one object 
 
-                    restrictionOnLandownership.Item = ImageTasks.ImageToByteArray(legendItem.Image ?? _imageEmptyPng, ImageFormat.Png);
+                    foreach (var feature in oerebDef.Features)
+                    {                    
+                        var restrictionOnLandownership = new RestrictionOnLandownership();
 
-                    var symbolLabel = Common.GetLabel((IGAGeoDataAdaptor)feature.DataSet.GetDataUtilities().Last(), feature.Item.Value); //TODO limitation OerebAdaptor
+                        var themeConfig = canton.Topics.First(x => x.Name == topic.Name);
 
-                    restrictionOnLandownership.TypeCode = legendItem.Key;
-                    //restrictionOnLandownership.TypeCodelist = ""; //todo not used at this time
+                        restrictionOnLandownership.Theme = new Theme() { Code = themeConfig.NameEnum, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = themeConfig.Name } };
+                        restrictionOnLandownership.SubTheme = topic.Name;
+                        restrictionOnLandownership.Information = new LocalisedMText[] { new LocalisedMText() { Language = LanguageCode.de, LanguageSpecified = true, Text = oerebDef.Information } }; //Aussage
 
-                    //------------------------------------------------------------------------------------------------
-                    //Geometry
+                        var lawStatusCode = EnumResolve.ParseEnum<LawstatusCode>(oerebDef.LawStatus.ToString());
+                        restrictionOnLandownership.Lawstatus = new Lawstatus() { Code = lawStatusCode, Text = new LocalisedText() { Language = LanguageCode.de, LanguageSpecified = true, Text = oerebDef.LawStatus.ToString() } };
 
-                    restrictionOnLandownership.Geometry = new Geometry[] {new Geometry()
-                    {
-                       ItemElementName = GetGeometryType(feature.GaGeoClass),
-                       ItemGeometryLOLS =  GetGeometry(feature.WktGeometry,feature.GaGeoClass.SpatialReferenceEpsg).ToString(),
-                       Lawstatus = new Lawstatus() {Code = EnumResolve.ParseEnum<LawstatusCode>(feature.LawStatus.ToString()), Text = new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = feature.LawStatus.ToString()} },
-                       MetadataOfGeographicalBaseData = feature.MetadataUrl,
-                       ResponsibleOffice = new Office()
-                       {
-                           Name = new LocalisedText[] {new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = "-"}}, //TODO content
-                           OfficeAtWeb = new WebReference() { Value = "http://127.0.0.1"} //TODO content
-                       },
-                       extensions = new extensions() {Any = new XmlElement[]
-                            {
-                                GetElement($"<GeometryExtension><Type>{feature.GaGeoClass.GeometryType}</Type></GeometryExtension>"),
+                        restrictionOnLandownership.ResponsibleOffice = new Office()
+                        {
+                            Name = new LocalisedText[] {new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = oerebDef.OfficeName} },
+                            OfficeAtWeb = new WebReference() { Value = oerebDef.OfficeAtWeb}
+                        };
+
+                        var legendItem = GetLegendFromFeature(feature.Item.Value);  //Common.GetLegendFromFeature(feature.Item.Value);
+
+                        restrictionOnLandownership.Item = ImageTasks.ImageToByteArray(legendItem.Image ?? _imageEmptyPng, ImageFormat.Png);
+
+                        var symbolLabel = Common.GetLabel((IGAGeoDataAdaptor)feature.DataSet.GetDataUtilities().Last(), feature.Item.Value); //TODO limitation OerebAdaptor
+
+                        restrictionOnLandownership.TypeCode = legendItem.Key;
+                        //restrictionOnLandownership.TypeCodelist = ""; //todo not used at this time
+
+                        //------------------------------------------------------------------------------------------------
+                        //Geometry
+
+                        restrictionOnLandownership.Geometry = new Geometry[] {new Geometry()
+                        {
+                           ItemElementName = GetGeometryType(feature.GaGeoClass),
+                           ItemGeometryLOLS =  GetGeometry(feature.WktGeometry,feature.GaGeoClass.SpatialReferenceEpsg).ToString(),
+                           Lawstatus = new Lawstatus() {Code = EnumResolve.ParseEnum<LawstatusCode>(feature.LawStatus.ToString()), Text = new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = feature.LawStatus.ToString()} },
+                           MetadataOfGeographicalBaseData = feature.MetadataUrl,
+                           ResponsibleOffice = new Office()
+                           {
+                               Name = new LocalisedText[] {new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = "-"}}, //TODO content
+                               OfficeAtWeb = new WebReference() { Value = "http://127.0.0.1"} //TODO content
+                           },
+                           extensions = new extensions() {Any = new XmlElement[]
+                                {
+                                    GetElement($"<GeometryExtension><Type>{feature.GaGeoClass.GeometryType}</Type></GeometryExtension>"),
+                                }
                             }
+                        }};
+
+                        //------------------------------------------------------------------------------------------------
+                        //Map
+
+                        //todo make GetMap Async or use a cache
+                        restrictionOnLandownership.Map = GetMap(feature, topic);
+
+                        restrictionOnLandownership.Area = Math.Round(feature.Area,0).ToString(CultureInfo.InvariantCulture);
+                        restrictionOnLandownership.PartInPercent = Math.Round(feature.PartinPercent*100).ToString(CultureInfo.InvariantCulture);
+
+                        var relevantGeodatasetsFromExtent = new List<IGAGeoDataSet>() {feature.GeoDataset};
+
+                        var legendItems = GetLegendFromExtent(relevantGeodatasetsFromExtent, topic.Parcel.FrameExtent);
+                        var legendItemsDistinct = legendItems.GroupBy(x => x.Key).Select(x => x.First()).ToList();
+
+                        restrictionOnLandownership.Map.OtherLegend = legendItemsDistinct.Select(x => new LegendEntry()
+                        {
+                            Item = ImageTasks.ImageToByteArray(x.Image, Setting.DefaultMimeType),
+                            LegendText = new LocalisedText[] {new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = x.Label} },
+                            TypeCode = x.Key,
+                            TypeCodelist = "", //TODO what is the content
+                            Theme = restrictionOnLandownership.Theme,
+                            SubTheme = restrictionOnLandownership.SubTheme,
+                        }).ToArray();
+
+                        //------------------------------------------------------------------------------------------------
+                        //Documents
+
+                        restrictionOnLandownership.LegalProvisions = GetDocuments(oerebDef,canton);
+
+                        //------------------------------------------------------------------------------------------------
+                        //Extension
+
+                        if (_includeDetail)
+                        {
+                            var rolExtension = "<RestrictionOnLandownershipExtension><Attributes>{0}</Attributes></RestrictionOnLandownershipExtension>";
+                            var attributes = string.Empty;
+
+                            foreach (var attribute in feature.Item.Value.Attributes)
+                            {
+                                if (attribute.AttributeSpec.Name.StartsWith("GAGeometry") || attribute.AttributeSpec.Name.StartsWith("GARuleExpression") || attribute.AttributeSpec.Name.StartsWith("GANiceRuleExpression"))
+                                {
+                                    continue;
+                                }
+
+                                attributes += $"<Attribute><Name>{attribute.AttributeSpec.Name}</Name><Type>{attribute.AttributeSpec.TypeName}</Type><Value>{attribute.Value.ToString()}</Value></Attribute>";
+                            }
+
+                            restrictionOnLandownership.extensions = new extensions()
+                            {
+                                Any = new XmlElement[]
+                                {
+                                    GetElement(String.Format(rolExtension, attributes)),
+                                }
+                            };
+
                         }
-                    }};
 
-                    //------------------------------------------------------------------------------------------------
-                    //Map
-
-                    //todo make GetMap Async or use a cache
-                    restrictionOnLandownership.Map = GetMap(feature, topic);
-
-                    restrictionOnLandownership.Area = Math.Round(feature.Area,0).ToString(CultureInfo.InvariantCulture);
-                    restrictionOnLandownership.PartInPercent = Math.Round(feature.PartinPercent*100).ToString(CultureInfo.InvariantCulture);
-
-                    var relevantGeodatasetsFromExtent = new List<IGAGeoDataSet>() {feature.GeoDataset};
-
-                    //guidsFromExtent.AddRange(additionalLayerGeoDatasets); //ToDo add additional layer ??
-
-                    var legendItems = GetLegendFromExtent(relevantGeodatasetsFromExtent, topic.Parcel.FrameExtent);
-
-                    //does not exclude involved objects
-                                       
-                    //var legendExcludeInvloved = legendItems.Where(x => !involvedFeatures.Contains(x.ObjectKey)).ToList();
-                    //var legendItemsDistinct = legendExcludeInvloved.GroupBy(x=> x.Key).Select(x=> x.First()).ToList();
-
-                    var legendItemsDistinct = legendItems.GroupBy(x => x.Key).Select(x => x.First()).ToList();
-
-                    restrictionOnLandownership.Map.OtherLegend = legendItemsDistinct.Select(x => new LegendEntry()
-                    {
-                        Item = ImageTasks.ImageToByteArray(x.Image, Setting.DefaultMimeType),
-                        LegendText = new LocalisedText[] {new LocalisedText() {Language = LanguageCode.de, LanguageSpecified = true, Text = x.Label} },
-                        TypeCode = x.Key,  //TODO what is the content
-                        TypeCodelist = "", //TODO what is the content
-                        Theme = restrictionOnLandownership.Theme,
-                        SubTheme = restrictionOnLandownership.SubTheme,
-                    }).ToArray();
-
-                    //------------------------------------------------------------------------------------------------
-                    //Documents
-
-                    restrictionOnLandownership.LegalProvisions = GetDocuments(oerebDef,canton);
-
-                    //------------------------------------------------------------------------------------------------
-                    //Extension
-
-                    //TODO add all detail-attributes to extension
-                    //TODO add additional images to extension
-
-                    restrictionsOnLandownership.Add(restrictionOnLandownership);
+                        restrictionsOnLandownership.Add(restrictionOnLandownership);
+                    }
                 }
             }
 
@@ -748,25 +763,26 @@ namespace Geocentrale.Apps.Server.Export.Xml
                 {
                     var imageItem = (ImageSet)parameter;
 
-                    if (false)//(imageCache.ContainsKey(imageItem.ImageKey))
+                    if (_imageCache.ContainsKey(imageItem.ImageKey))
                     {
-                        //imageItem.Image = imageCache[imageItem.ImageKey];
+                        log.Info($"*** image {imageItem.ImageKey} comes from cache");
+                        imageItem.Image = _imageCache[imageItem.ImageKey];
                     }
                     else
                     {
-                        var gaGeoDataAdaptor = imageItem.GeoDataset.GetDataUtilities().Last() as IGAGeoDataAdaptor;
-
-                        if (gaGeoDataAdaptor is ArcgisServerRestAdaptor || gaGeoDataAdaptor is OerebAdaptor || gaGeoDataAdaptor is ArcgisServerRestMapserviceAdaptor)
-                        {
-                            PropertyInfo property = gaGeoDataAdaptor.GetType().GetProperty("_dpi", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                            property.SetValue(gaGeoDataAdaptor, _dpi, null);
-                            log.Debug(string.Format("set image dpi to {0}", _dpi));
-                        }
-
                         Image image;
 
                         if (_includeMap)
                         {
+                            var gaGeoDataAdaptor = imageItem.GeoDataset.GetDataUtilities().Last() as IGAGeoDataAdaptor;
+
+                            if (gaGeoDataAdaptor is ArcgisServerRestAdaptor || gaGeoDataAdaptor is OerebAdaptor || gaGeoDataAdaptor is ArcgisServerRestMapserviceAdaptor)
+                            {
+                                PropertyInfo property = gaGeoDataAdaptor.GetType().GetProperty("_dpi", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                                property.SetValue(gaGeoDataAdaptor, _dpi, null);
+                                log.Debug($"set image dpi to {_dpi}");
+                            }
+
                             var response = gaGeoDataAdaptor.ExportImage(imageItem.MimeType, imageItem.Extent, imageItem.Size);
 
                             if (!response.Successful)
@@ -777,16 +793,18 @@ namespace Geocentrale.Apps.Server.Export.Xml
 
                             image = response.Value as Image;
 
-                            //if (!imageCache.ContainsKey(imageItem.ImageKey))
-                            //{
-                            //    imageCache.Add(imageItem.ImageKey, image);
-                            //}
+                            lock (_imageCache)
+                            {
+                                if (!_imageCache.ContainsKey(imageItem.ImageKey))
+                                {
+                                    _imageCache.Add(imageItem.ImageKey, image);
+                                }
+                            }
                         }
                         else
                         {
                             image = _imageEmptyPng;
-                        }
-                        
+                        }                     
 
                         imageItem.Image = image;
                     }

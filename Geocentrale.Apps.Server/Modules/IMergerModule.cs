@@ -1,4 +1,5 @@
-﻿using Geocentrale.Apps.DataContracts;
+﻿using System.Collections.Generic;
+using Geocentrale.Apps.DataContracts;
 
 namespace Geocentrale.Apps.Server.Modules
 {

@@ -13,14 +13,12 @@ namespace Geocentrale.Apps.Server.Catalog
         public List<Application> ChildApps { get; set; }
         public List<Resource> Resources { get; set; }
         public List<ApplicationTopic> Topics { get; set; }
-        public List<ApplicationSetting> Settings { get; set; }
 
         public Application()
         {
             ChildApps = new List<Application>();
             Resources = new List<Resource>();
             Topics = new List<ApplicationTopic>();
-            Settings = new List<ApplicationSetting>();
         }
 
         public Application(Guid guid, string name)

@@ -162,8 +162,14 @@ namespace Geocentrale.Apps.Server
             return Cantons.FirstOrDefault(canton => canton.Communities.Any(municipalityItem => municipalityItem.Name.ToLower() == municipality.ToLower()));
         }
 
+        public class TopicExclude
+        {
+            public string Code { get; set; }
+        }
+
         public class Topic
         {
+            public long Seq { get; set; } = 0;
             public string NameEnum { get; set; }
             public string Name { get; set; }
             public string Code { get; set; }
@@ -208,7 +214,15 @@ namespace Geocentrale.Apps.Server
 
             public RealEstate RealEstate { get; set; }
 
+            public List<TopicExclude> TopicsExcluded { get; set; }
+
             public List<Topic> Topics { get; set; }
+
+            public SearchDataset Search { get; set; }
+
+            public ProcessDataset Process { get; set; }
+
+            public List<Parcel> CheckProcessor { get; set; }
 
             [XmlIgnore]
             public Dictionary<string, string> TopicsDictionary
@@ -224,6 +238,8 @@ namespace Geocentrale.Apps.Server
                 Communities = new List<Municipality>();
                 Glossaries = new List<Glossary>();
                 Resources = new List<Resource>();
+                Search = new SearchDataset();
+                TopicsExcluded = new List<TopicExclude>();
             }
         }
 
@@ -243,6 +259,7 @@ namespace Geocentrale.Apps.Server
         {
             public string Name { get; set; }
             public string PathLogo { get; set; }
+            public string Code { get; set; } //bfsnr
         }
 
         public class Office
@@ -311,6 +328,35 @@ namespace Geocentrale.Apps.Server
             public string AttributeLawStatus { get; set; }
 
             public string AttributeMoreInformation { get; set; } //weitere Informationen und Hinweise
+        }
+
+        public class SearchDataset
+        {
+            public int Crs { get; set; }
+            public Guid DsGuid { get; set; }
+            public string Egrid { get; set; }
+            public string Nbindent { get; set; }
+            public string Number { get; set; }
+            public string Street { get; set; }
+            public string Housenumber { get; set; }
+            public string Postalcode { get; set; }
+            public string Type { get; set; }
+            public string Shape { get; set; }
+            public string KindOf { get; set; }
+        }
+
+        public class ProcessDataset
+        {
+            public string Project { get; set; }
+            public string Egrid { get; set; }   //fieldname egrid in selectionlayer
+            public Guid App { get; set; }       //todo remove later
+            public Guid Function { get; set; }  //todo remove later
+        }
+
+        public class Parcel
+        {
+            public string Egrid { get; set; }
+            public string Comment { get; set; }
         }
     }
 }
