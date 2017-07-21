@@ -1,4 +1,4 @@
-Das jetzige Projekt ist noch nicht Kompilierbar, da einige Abhängigkeiten mach wie vor noch nicht aufgelöst sind, diese werden in den kommenden Monaten ergänzt.
+Das jetzige Projekt ist noch nicht Kompilierbar, da einige Abhängigkeiten nach wie vor noch nicht aufgelöst sind, diese werden in den kommenden Monaten ergänzt.
 
 Der bundeskonforme Web-API REST Service ist im Projekt Oereb-Service zu finden (Version 0.4). Das Schema der neuen Version 1.x befindet sich noch in der Vernehmlassung und ist noch nicht umgesetzt.
 
